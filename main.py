@@ -5,7 +5,7 @@ from urllib.request import urlopen
 import urllib
 
 ERROR_CODE_DICT = {
-     503: 'Smite server\'s are unavailable',
+     503: 'Smite servers are unavailable',
      404: 'Bad request',
      400: 'API Auth invaild'
 }
@@ -23,11 +23,10 @@ class Smite(object):
         return now.strftime('%Y%m%d%H%M%S')
 
     def create_signature(self, name):
-        md5hash = hashlib.md5(self.dev_id.encode('utf-8')
+        return hashlib.md5(self.dev_id.encode('utf-8')
                                + name.encode('utf-8')
                                + self.auth_key.encode('utf-8')
-                               + self.create_timestamp().encode('utf-8'))
-        return md5hash.hexadigest()
+                               + self.create_timestamp().encode('utf-8')).hexdigest()
 
     def open_session(self):
         signature = self.create_signature('createsession')
@@ -87,5 +86,4 @@ smite = Smite(DEV_ID, AUTH_KEY)
 smite.open_session()
 
 print(smite.pid_by_name('lyqspl'))
-
 
