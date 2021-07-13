@@ -3,7 +3,13 @@ import hashlib
 import json
 from urllib.request import urlopen
 import urllib
-from types import SimpleNamespace
+
+ERROR_CODE_DICT = {
+     503: 'Smite server\'s are unavailable',
+     404: 'Bad request',
+     400: 'API Auth invaild'
+}
+
 
 class Smite(object):
     def __init__(self, dev_id, auth_key):
@@ -17,18 +23,24 @@ class Smite(object):
         return now.strftime('%Y%m%d%H%M%S')
 
     def create_signature(self, name):
-        return hashlib.md5(self.dev_id.encode('utf-8') + name.encode('utf-8') + self.auth_key.encode('utf-8')
-                           + self.create_timestamp().encode('utf-8')).hexdigest()
+        md5hash = hashlib.md5(self.dev_id.encode('utf-8')
+                               + name.encode('utf-8')
+                               + self.auth_key.encode('utf-8')
+                               + self.create_timestamp().encode('utf-8'))
+        return md5hash.hexadigest()
 
     def open_session(self):
         signature = self.create_signature('createsession')
-        url = '{0}/createsessionJson/{1}/{2}/{3}'.format(self.BASE_URL, self.dev_id, signature, self.create_timestamp())
+        url = '{0}/createsessionJson/{1}/{2}/{3}'.format(self.BASE_URL,
+                                                         self.dev_id,
+                                                         signature,
+                                                         self.create_timestamp())
         try:
             html = urlopen(url).read()
             self.session = json.loads(html.decode('utf-8'))['session_id']
             print("Smite API connected. Session id: {0}".format(self.session))
         except urllib.error.HTTPError as e:
-            print("Couldn't connect to smite api.")
+            print("Error: {0}".format(ERROR_CODE_DICT[e.code]))
 
     def create_request(self, name, params=None):
         signature = self.create_signature(name)
@@ -44,9 +56,24 @@ class Smite(object):
         print(url)
         try:
             html = urlopen(url).read()
-            return html.decode('utf-8')
+            return json.loads(html.decode('utf-8'))
         except urllib.error.HTTPError as e:
-            print("Couldn't make request.")
+            print("Couldn't make request [{0}]."
+                  .format(ERROR_CODE_DICT[e.code]))
+
+    def ping(self):
+        url = '{0}/pingJson'.format(self.BASE_URL)
+        try:
+            html = urlopen(url).read()
+            return json.loads(html.decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            print("Error: {0}".format(ERROR_CODE_DICT[e.code]))
+
+    def server_status(self):
+        return self.make_request('gethirezserverstatus')[0]['status']
+
+    def pid_by_name(self, name):
+        return self.make_request('getplayer', [name])
 
 
 file = open('auth.json')
@@ -58,7 +85,7 @@ AUTH_KEY = auth['authKey']
 
 smite = Smite(DEV_ID, AUTH_KEY)
 smite.open_session()
-player = smite.make_request('getplayer', ['xNykram'])
-player = json.loads(player)
-for (k, v) in player[0].items():
-    print('{0}: {1}'.format(k, v))
+
+print(smite.pid_by_name('lyqspl'))
+
+
