@@ -5,7 +5,7 @@ from urllib.request import urlopen
 import urllib
 
 ERROR_CODE_DICT = {
-     503: 'Smite servers are unavailable',
+     503: 'Bad request',
      404: 'Bad request',
      400: 'API Auth invaild'
 }
@@ -39,7 +39,7 @@ class Smite(object):
             self.session = json.loads(html.decode('utf-8'))['session_id']
             print("Smite API connected. Session id: {0}".format(self.session))
         except urllib.error.HTTPError as e:
-            print("Error: {0}".format(ERROR_CODE_DICT[e.code]))
+            print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
 
     def create_request(self, name, params=None):
         signature = self.create_signature(name)
@@ -58,7 +58,7 @@ class Smite(object):
             return json.loads(html.decode('utf-8'))
         except urllib.error.HTTPError as e:
             print("Couldn't make request [{0}]."
-                  .format(ERROR_CODE_DICT[e.code]))
+                  .format(ERROR_CODE_DICT.get(e.code, e.code)))
 
     def ping(self):
         url = '{0}/pingJson'.format(self.BASE_URL)
@@ -66,12 +66,12 @@ class Smite(object):
             html = urlopen(url).read()
             return json.loads(html.decode('utf-8'))
         except urllib.error.HTTPError as e:
-            print("Error: {0}".format(ERROR_CODE_DICT[e.code]))
+            print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
 
     def server_status(self):
-        return self.make_request('gethirezserverstatus')[0]['status']
+        return self.make_request('gethirezserverstatus')[0]
 
-    def pid_by_name(self, name):
+    def get_player(self, name):
         return self.make_request('getplayer', [name])
 
 
@@ -84,6 +84,3 @@ AUTH_KEY = auth['authKey']
 
 smite = Smite(DEV_ID, AUTH_KEY)
 smite.open_session()
-
-print(smite.pid_by_name('lyqspl'))
-
