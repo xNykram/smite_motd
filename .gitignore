@@ -133,3 +133,4 @@ cython_debug/
 # Other
 auth.json
 
+/.idea/misc.xml
