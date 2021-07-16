@@ -4,6 +4,7 @@ import json
 from urllib.request import urlopen
 import urllib
 
+# May be incorrect
 ERROR_CODE_DICT = {
      503: 'Bad request',
      404: 'Bad request',
@@ -52,7 +53,6 @@ class Smite(object):
     def make_request(self, name, params=None):
         url = self.create_request(name, params)
         url = url.replace(' ', '%20')  # Cater for spaces in parameters
-        print(url)
         try:
             html = urlopen(url).read()
             return json.loads(html.decode('utf-8'))
@@ -73,6 +73,12 @@ class Smite(object):
 
     def get_player(self, name):
         return self.make_request('getplayer', [name])
+    
+    def get_player_id(self, name):
+        response = smite.make_request('getplayeridbyname', [name])
+        if response == []:
+            return 0 
+        return response[0]['player_id']
 
 
 file = open('auth.json')
