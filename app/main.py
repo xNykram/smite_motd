@@ -81,7 +81,7 @@ class Smite(object):
         return response[0]['player_id']
 
 
-file = open('auth.json')
+file = open('../auth.json')
 auth = json.load(file)
 file.close()
 
