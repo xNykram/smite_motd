@@ -1,9 +1,0 @@
-{
-  "database":
-  {
-    "server_name" : "51.68.140.249",
-    "dbname" : "smiteAPI",
-    "login" : "smiteAPI",
-    "password" : "smiteapi684"
-  }
-}
