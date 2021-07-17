@@ -47,7 +47,9 @@ Checks the connection to the database server. This function does not take any ar
 Send a request to the database, function takes two arguments `query` and `operation`. If the operation parameter equals *read*, function will return all requested data. However if we selected *write* the function will only display status of operation (sucess or error).
  
 <h5>Parameters:</h5>
+
  - Query: database request, example: `SELECT * FROM [table_name] WHERE col1 = "DEV"`
- - Operation : direction of request, if we want to read data from db we should use **read** parameter, in other cases when we would like to insert/update/delete we need to use **write** argument.
+ 
+- Operation : direction of request, if we want to read data from db we should use **read** parameter, in other cases when we would like to insert/update/delete we need to use **write** argument.
 
 ---
