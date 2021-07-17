@@ -7,7 +7,8 @@
 <h3>Database</h3>
 
 <h4>1. Structure</h4>
-- `[smiteapi].[dbo].[players]`
+
+- `[smiteapi].[dbo].[testplayers]`
 
 Table storing basic information about the player.
 
@@ -35,13 +36,13 @@ Table that we can use for testing reasons, structure is the same as above.
 
 <h4>2. Functions</h4>
 
-> *healthcheck():*
+ > <span style="color:#ff4040">*healthcheck():*</span>
 
 Checks the connection to the database server. This function does not take any arguments. Returns response if the application was able to connect to the database.
 
 ---
 
-> *run_query(query, operation)*
+> <span style="color:#ff4040">*run_query(query, operation)*</span>
 
 Send a request to the database, function takes two arguments `query` and `operation`. If the operation parameter equals *read*, function will return all requested data. However if we selected *write* the function will only display status of operation (sucess or error).
  
