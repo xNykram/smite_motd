@@ -128,4 +128,4 @@ cython_debug/
 
 # Other
 auth.json
-app/db/dbconfig.json
+/app/db/dbconfig.json
