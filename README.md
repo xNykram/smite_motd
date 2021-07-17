@@ -36,7 +36,7 @@ Table that we can use for testing reasons, structure is the same as above.
 
 <h4>2. Functions</h4>
 
- > *<span style="color:#ff4040">healthcheck():</span>*
+ > *healthcheck():*
 
 Checks the connection to the database server. This function does not take any arguments. Returns response if the application was able to connect to the database.
 
