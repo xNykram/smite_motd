@@ -12,6 +12,8 @@ ERROR_CODE_DICT = {
      400: 'API Auth invaild'
 }
 
+ITEMS_DICT = {}
+
 
 class Smite(object):
     def __init__(self, dev_id, auth_key):
@@ -19,10 +21,17 @@ class Smite(object):
         self.auth_key = str(auth_key)
         self.BASE_URL = 'https://api.smitegame.com/smiteapi.svc'
         self.session = None
+        self.open_session()
+        self.update_items()
 
     def create_timestamp(self):
         now = datetime.utcnow()
         return now.strftime('%Y%m%d%H%M%S')
+
+    def update_items(self, arr=ITEMS_DICT):
+        items = self.make_request('getitems', [1])
+        for i in items:
+            arr[i['ItemId']] = i['DeviceName']
 
     def create_signature(self, name):
         return hashlib.md5(self.dev_id.encode('utf-8')
@@ -60,6 +69,7 @@ class Smite(object):
         except urllib.error.HTTPError as e:
             print("Couldn't make request [{0}]."
                   .format(ERROR_CODE_DICT.get(e.code, e.code)))
+            return []
 
     def ping(self):
         url = '{0}/pingJson'.format(self.BASE_URL)
@@ -83,3 +93,15 @@ class Smite(object):
         if response == []:
             return 0
         return response[0]['player_id']
+
+    def get_match_ids(self, queue, date, hour=-1, limit=-1):
+        count = 0
+        response = self.make_request('getmatchidsbyqueue', [queue, date, hour])
+        result = []
+        for entry in response:
+            if limit >= 0 and count >= limit:
+                break
+            result.append(entry['Match'])
+            count += 1
+        return result
+
