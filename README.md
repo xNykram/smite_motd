@@ -4,7 +4,7 @@
 ![maintenance](https://img.shields.io/badge/python-3.9-blue.svg)
 ![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)
 
-###*Database structure*
+###Database structure
 
 - `[smiteapi].[dbo].[players]`
 
