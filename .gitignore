@@ -100,12 +100,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-/.idea/.gitignore
-/.idea/modules.xml
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/SmiteAPI-Dev.iml
-/.idea/vcs.xml
-
+/.idea
+.idea
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -133,4 +129,3 @@ cython_debug/
 # Other
 auth.json
 
-/.idea/misc.xml
