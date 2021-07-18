@@ -43,15 +43,16 @@ class PlayerEntry(object):
 
 class Match(object):
     def __init__(self, entry=[], match_id='', api=None):
+        self.id = 0
+        self.queue_id = 0
+        self.entries = []
+        data = entry
         if match_id != '' and api is not None:
             data = api.make_request('getmatchdetails', [match_id])
-        elif entry is []:
-            pass
-        else:
-            data = entry
+        elif entry == []:
+            return
         self.queue_id = data[0]['match_queue_id']
         self.id = data[0]['Match']
-        self.entries = []
         for i in data:
             if i['playerName'] != '':
                 self.entries.append(PlayerEntry(i))

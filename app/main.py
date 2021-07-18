@@ -18,8 +18,5 @@ analyzer = Analyzer(smite)
 
 queue = test.latest_queue(smite)
 date = '20210717'
-arr = smite.get_match_ids(queue, date, limit=20)
 
-queue_id = test.latest_queue(smite)
-analyzer.analyze_queue(queue_id, '20210717', limit=20)
-
+analyzer.analyze_queue(queue, date, 6)
