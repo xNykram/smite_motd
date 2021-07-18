@@ -29,6 +29,7 @@ class PlayerEntry(object):
     def __init__(self, data):
         self.name = data['playerName']
         self.id = data['playerId']
+        self.god_id = data['GodId']
         self.items = []
         self.actives = []
         for i in range(1, 3):

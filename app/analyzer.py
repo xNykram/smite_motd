@@ -8,9 +8,11 @@ class Analyzer(object):
         self.match_ids = match_ids
         self.api = api
         self.items = {}
+        self.gods = {}
 
     def analyze(self, match):
         for player in match.entries:
+            self.gods[player.god_id] = self.gods.get(player.god_id, 0) + 1
             for item in player.items:
                 if item == '':
                     continue

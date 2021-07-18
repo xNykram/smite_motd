@@ -10,6 +10,7 @@ DEV_ID = jsfile['devId']
 AUTH_KEY = jsfile['authKey']
 file.close()
 
+
 smite = Smite(DEV_ID, AUTH_KEY)
 
 test = smite.get_player('LyQsPL')
@@ -19,4 +20,4 @@ analyzer = Analyzer(smite)
 queue = test.latest_queue(smite)
 date = '20210717'
 
-analyzer.analyze_queue(queue, date, 6)
+analyzer.analyze_queue(queue, date, 3)

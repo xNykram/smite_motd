@@ -13,6 +13,7 @@ ERROR_CODE_DICT = {
 }
 
 ITEMS_DICT = {}
+GODS_DICT = {}
 
 
 class Smite(object):
@@ -23,6 +24,7 @@ class Smite(object):
         self.session = None
         self.open_session()
         self.update_items()
+        self.update_gods()
 
     def create_timestamp(self):
         now = datetime.utcnow()
@@ -32,6 +34,11 @@ class Smite(object):
         items = self.make_request('getitems', [1])
         for i in items:
             arr[i['ItemId']] = i['DeviceName']
+
+    def update_gods(self, arr=GODS_DICT):
+        gods = self.make_request('getgods', [1])
+        for god in gods:
+            arr[god['id']] = god['Name']
 
     def create_signature(self, name):
         return hashlib.md5(self.dev_id.encode('utf-8')
