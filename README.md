@@ -8,16 +8,16 @@
 
 <h4>1. Structure</h4>
 
-- `[smiteapi].[dbo].[testplayers]`
+- `[smiteapi].[dbo].[players]`
 
 Table storing basic information about the player.
 
 
 | Column        | Type           | Description  |
 |:--------------:|:---------------:|:------------:|
-| accountID      | `int` | player ID       |
+| ID      | `int` | player ID       |
 | nickname            | `nvarchar`        |   player nickname        |
-| lvl            | `int`        |   player Lvl        |
+| lvl            | `int`        |   player lvl        |
 | clanID | `int`        |    clan ID         |
 | avatarUrl | `nvarchar`        |    player's avatar        |
 | createdAt | `date`        |    date of account creation         |
@@ -28,11 +28,22 @@ Table storing basic information about the player.
 
 ---
 
-
 - `[smiteapi].[dbo].[testplayers]`
 
 Table that we can use for testing reasons, structure is the same as above.
 
+---
+
+- `[smiteapi].[dbo].[motd]`
+
+Table storing all information about motd. Stores data of prospective, current and archived motds. 
+
+
+| Column        | Type           | Description  |
+|:--------------:|:---------------:|:------------:|
+| name      | `nvarchar` | name of the motd       |
+| description            | `nvarchar`        |   full description about motd        |
+| validDate            | `datetime`        |   motd start date        |
 
 <h4>2. Functions</h4>
 
