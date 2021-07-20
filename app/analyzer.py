@@ -1,10 +1,12 @@
 from smiteapi.smiteobjects import Match, Player, PlayerEntry
 import sys
 
+# max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
 
 
 class Analyzer(object):
+    """analyzes smite data"""
     def __init__(self, api, match_ids=[]):
         self.match_ids = match_ids
         self.api = api
@@ -12,6 +14,7 @@ class Analyzer(object):
         self.gods = {}
 
     def analyze(self, match):
+        """analyzes single match object"""
         for player in match.entries:
             self.gods[player.god_id] = self.gods.get(player.god_id, 0) + 1
             for item in player.items:
@@ -23,6 +26,7 @@ class Analyzer(object):
     # since smite-api returns PlayerEntries(raw) instead of raw matches
     # we have to handle it separately
     def analyze_batch(self, batch):
+        """analyzes set of raw PlayerEntries"""
         to_analyze = [Match()]
         index = 0
         for match in batch:
@@ -43,6 +47,7 @@ class Analyzer(object):
         return index + 1
 
     def analyze_queue(self, queue_id, date, hour=-1):
+        """calls for all games from the given queue and analyzes them"""
         response = self.api.make_request('getmatchidsbyqueue', [queue_id, date, hour])
         ids = list(map(lambda d: d['Match'], response))
         total = len(ids)

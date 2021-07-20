@@ -12,9 +12,11 @@ class Player(object):
             return response[0].get('Match', 0)
 
     def latest_match(self, api):
+        """returns latest match as Match object"""
         return Match(match_id=self.latest_match_id(api), api=api)
 
     def latest_queue(self, api):
+        """returns latest queue id"""
         response = api.make_request('getmatchhistory', [self.id])
         if response == []:
             return None
@@ -22,6 +24,7 @@ class Player(object):
             return response[0].get('Match_Queue_Id', 0)
 
     def raw_api_data(self, api):
+        """calls for data and return raw json"""
         return api.make_request('getplayer', [self.name])
 
 
@@ -59,4 +62,5 @@ class Match(object):
                 self.entries.append(PlayerEntry(i))
 
     def raw_api_data(self, api):
+        """calls for data and return raw json"""
         return api.make_request('getmatchdetails', [self.id])

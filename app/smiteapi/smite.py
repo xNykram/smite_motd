@@ -28,26 +28,31 @@ class Smite(object):
         self.update_gods()
 
     def create_timestamp(self):
+        """returns timestamp needed for api calls"""
         now = datetime.utcnow()
         return now.strftime('%Y%m%d%H%M%S')
 
     def update_items(self, arr=ITEMS_DICT):
+        """calls api and updates arr with items from response"""
         items = self.make_request('getitems', [1])
         for i in items:
             arr[i['ItemId']] = i['DeviceName']
 
     def update_gods(self, arr=GODS_DICT):
+        """calls api and updates arr with gods info from response"""
         gods = self.make_request('getgods', [1])
         for god in gods:
             arr[god['id']] = god['Name']
 
     def create_signature(self, name):
+        """returns hashed signature needed for api calls"""
         return hashlib.md5(self.dev_id.encode('utf-8')
                                + name.encode('utf-8')
                                + self.auth_key.encode('utf-8')
                                + self.create_timestamp().encode('utf-8')).hexdigest()
 
     def open_session(self):
+        """attempts to open a new session"""
         signature = self.create_signature('createsession')
         url = '{0}/createsessionJson/{1}/{2}/{3}'.format(self.BASE_URL,
                                                          self.dev_id,
@@ -61,6 +66,7 @@ class Smite(object):
             print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
 
     def create_request(self, name, params=None):
+        """return request string based on name and params"""
         signature = self.create_signature(name)
         time = self.create_timestamp()
         path = [name + 'Json', self.dev_id, signature, self.session, time]
@@ -69,6 +75,7 @@ class Smite(object):
         return self.BASE_URL + '/' + '/'.join(path)
 
     def make_request(self, name, params=None):
+        """calls api with given request"""
         url = self.create_request(name, params)
         url = url.replace(' ', '%20')  # Cater for spaces in parameters
         try:
@@ -79,30 +86,26 @@ class Smite(object):
                   .format(ERROR_CODE_DICT.get(e.code, e.code)))
             return []
 
-    def ping(self):
-        url = '{0}/pingJson'.format(self.BASE_URL)
-        try:
-            html = urlopen(url).read()
-            return json.loads(html.decode('utf-8'))
-        except urllib.error.HTTPError as e:
-            print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
-
     def server_status(self, to_json=True):
+        """calls for server status"""
         return self.make_request('gethirezserverstatus', to_json)[0]
 
     def get_player(self, name):
+        """returns player object with given name"""
         response = self.make_request('getplayer', [name])
         if response == []:
             return None
         return Player(response[0])
 
     def get_player_id(self, name):
+        """returns player id"""
         response = self.make_request('getplayeridbyname', [name])
         if response == []:
             return 0
         return response[0]['player_id']
 
     def get_match_ids(self, queue, date, hour=-1, limit=-1):
+        """returns match id array limited by limit param"""
         count = 0
         response = self.make_request('getmatchidsbyqueue', [queue, date, hour])
         result = []
