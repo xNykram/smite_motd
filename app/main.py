@@ -1,6 +1,6 @@
-from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT
-from smiteapi.smiteobjects import Match
-from analyzer import Analyzer
+from app.smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT
+from app.smiteapi.smiteobjects import Match
+from app.analyzer import Analyzer
 
 import json
 

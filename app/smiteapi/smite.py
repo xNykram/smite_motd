@@ -4,7 +4,7 @@ import json
 from app.db.database import db
 from urllib.request import urlopen
 import urllib
-from smiteapi.smiteobjects import Player, Match
+from app.smiteapi.smiteobjects import Player, Match
 
 # May be incorrect
 ERROR_CODE_DICT = {
