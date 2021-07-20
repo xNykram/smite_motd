@@ -70,3 +70,4 @@ venv.bak/
 .ropeproject
 /app/dbconfig.json
 /auth.json
+*.swp
