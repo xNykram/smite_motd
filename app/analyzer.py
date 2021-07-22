@@ -59,3 +59,13 @@ class Analyzer(object):
             count += self.analyze_batch(batch)
             print('\rAnalyzed {}/{} games.'.format(count, total), end='', flush=True)
         print('\nQueue {} with {} games analyzed.'.format(queue_id, count))
+
+    def load_to_db(self, db):
+        """TODO loads results of analyze into database"""
+        pass
+
+    
+    @staticmethod
+    def from_db(db):
+        """TODO gets analyzed data from a database and creates a new Analyzer object based on it"""
+        pass
