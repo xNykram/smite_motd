@@ -12,7 +12,6 @@
 
 Table storing basic information about the player.
 
-
 | Column        | Type           | Description  |
 |:--------------:|:---------------:|:------------:|
 | ID      | `int` | player ID       |
@@ -38,12 +37,24 @@ Table that we can use for testing reasons, structure is the same as above.
 
 Table storing all information about motd. Stores data of prospective, current and archived motds. 
 
-
 | Column        | Type           | Description  |
 |:--------------:|:---------------:|:------------:|
 | name      | `nvarchar` | name of the motd       |
 | description            | `nvarchar`        |   full description about motd        |
 | validDate            | `datetime`        |   motd start date        |
+
+---
+
+- `[smiteapi].[dbo].[analyzer]`
+
+Table storing all results from analyzer.
+
+| Column        | Type           | Description  |
+|:--------------:|:---------------:|:------------:|
+| queueID      | `int` | queue id       |
+| gods            | `nvarchar`        |  list of gods        |
+| items            | `nvarchar`        |   list of items        |
+| dateOfMatch            | `datetime`        |   match start date        |
 
 <h4>2. Functions</h4>
 
