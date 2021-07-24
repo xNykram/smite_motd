@@ -9,4 +9,6 @@ def read_config():
         dbname = config['database']['dbname']
         login = config['database']['login']
         passwd = config['database']['password']
-    return server_name, dbname, login, passwd
+        config_url = "mssql+pyodbc://" + login + ':' + passwd + "@" \
+                     + server_name + "/" + dbname + "?driver=SQL+Server"
+    return config_url
