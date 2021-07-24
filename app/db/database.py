@@ -1,27 +1,16 @@
-import pyodbc
-from app.common.smiteapiscripts import read_config
+from sqlalchemy import create_engine
+from app.smiteapi.smiteapiscripts import read_config
 
 
 class Database:
     def __init__(self):
-        self.config = read_config()
-        self.server_name = self.config[0]
-        self.dbname = self.config[1]
-        self.login = self.config[2]
-        self.password = self.config[3]
-        self.command = 'DRIVER={ODBC Driver 17 for SQL Server};'\
-                      'SERVER=' + self.server_name + ';'\
-                      'DATABASE=' + self.dbname + ';'\
-                      'UID=' + self.login + ';'\
-                      'PWD=' + self.password
+        self.engine = create_engine(read_config())
 
     def healthcheck(self):
         """checks the connection to the database server"""
         try:
-            connection = pyodbc.connect(self.command)
-            cursor = connection.cursor()
-            cursor.execute('SELECT 1')
-            cursor.close()
+            with self.engine.connect() as connection:
+                connection.execute("select 1")
             return 'Connection successfully'
         except Exception as Error:
             return 'Unable to reach database server. Error: ' + str(Error)
@@ -33,22 +22,20 @@ class Database:
         """
         if operation == 'read':
             try:
-                connection = pyodbc.connect(self.command)
-                cursor = connection.cursor()
-                cursor.execute(query)
-                data = cursor.fetchall()
-                return data
+                with self.engine.connect() as connection:
+                    query = connection.execute(query)
+                    if query is not None:
+                        for row in query:
+                            return row
             except Exception as Error:
                 return 'Database error:' + str(Error)
         elif operation == 'write':
             try:
-                connection = pyodbc.connect(self.command)
-                cursor = connection.cursor()
-                cursor.execute(query)
-                cursor.commit()
+                with self.engine.connect() as connection:
+                    connection.execute(query)
                 return 'The operation was successful'
             except Exception as Error:
                 return 'Database error:' + str(Error)
         else:
-                return 'Expected parameter read or write'
+            return 'Expected parameter read or write'
 db = Database()
