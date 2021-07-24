@@ -113,7 +113,7 @@ class Smite(object):
             count += 1
         return result
 
-    def get_motd(self):
+    def save_motd(self):
         """takes tomorrow's motd and saves it in the database"""
         response = self.make_request('getmotd')
         date = self.get_current_date()
@@ -121,9 +121,14 @@ class Smite(object):
         for row in response:
             mdate = datetime.strptime((row['startDateTime'][:-11]), '%m/%d/%Y')
             if mdate > date and mdate < date_future:
-                sql_command = 'INSERT INTO motds (name, description, validDate) VALUES ({}, {}, {})'\
-                    .format(row['name'], row['description'], row['startDateTime'])
-                db.run_sql_query(sql_command, 'write')
+                row['description'] = row['description'].replace("<li>", "")\
+                    .replace("</li>", "")
+                try:
+                    sql_command = "INSERT INTO motd (name, description, validDate) VALUES ('{}', '{}', '{}')"\
+                        .format(row['name'], row['description'], row['startDateTime'])
+                    db.run_sql_query(sql_command, 'write')
+                except Exception as e:
+                    return 'Unable to update motd: ' + str(e)
 
     @staticmethod
     def get_current_date():
