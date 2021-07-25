@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
-from app.smiteapi.smiteapiscripts import read_config
+from app.smiteapi.smiteapiscripts import read_db_config
 
 
 class Database:
     def __init__(self):
-        self.engine = create_engine(read_config())
+        self.engine = create_engine(read_db_config())
 
     def healthcheck(self):
         """checks the connection to the database server"""

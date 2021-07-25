@@ -1,21 +1,17 @@
 from app.smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT
 from app.smiteapi.smiteobjects import Match
 from app.analyzer import Analyzer
+from app.smiteapi.smiteapiscripts import read_auth_config
 
-import json
-
-file = open('../auth.json')
-jsfile = json.load(file)
-DEV_ID = jsfile['devId']
-AUTH_KEY = jsfile['authKey']
-file.close()
 
 def sort_and_map(d1, d2):
     mapped = {d2.get(k, ''): v for k, v in d1.items()}
     return {k: v for k, v in sorted(mapped.items(), key=lambda d: d[1])}
 
 
-smite = Smite(DEV_ID, AUTH_KEY)
+keys = read_auth_config()
+
+smite = Smite(keys[0], keys[1])
 
 test = smite.get_player('LyQsPL')
 
