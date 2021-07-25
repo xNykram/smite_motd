@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 import hashlib
 import json
-from app.db.database import db
+from db.database import db
 from urllib.request import urlopen
 import urllib
-from app.smiteapi.smiteobjects import Player, Match
+from smiteapi.smiteobjects import Player
 
 # May be incorrect
 ERROR_CODE_DICT = {

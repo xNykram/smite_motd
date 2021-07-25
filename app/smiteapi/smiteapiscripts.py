@@ -5,7 +5,7 @@ import sys, os
 def read_db_config():
     """read database config that is stored in json"""
     project_dir = sys.path[1]
-    config_dir = os.path.join(project_dir, r"app\dbconfig.json")
+    config_dir = os.path.join(project_dir, r"dbconfig.json")
     with open(config_dir, 'r') as dbconfig:
         config = json_load(dbconfig)
         server_name = config['database']['server_name']
@@ -19,7 +19,7 @@ def read_db_config():
 def read_auth_config():
     """read auth config that is stored in json"""
     project_dir = sys.path[1]
-    config_dir = os.path.join(project_dir, r"auth.json")
+    config_dir = os.path.join(project_dir, r".\auth.json")
     with open(config_dir, 'r') as authconfig:
         config = json_load(authconfig)
         dev_id = config['devId']

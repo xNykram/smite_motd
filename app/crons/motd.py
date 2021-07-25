@@ -1,5 +1,5 @@
-from app.smiteapi.smite import Smite
-from app.smiteapi.smiteapiscripts import read_auth_config
+from smiteapi.smite import Smite
+from smiteapi.smiteapiscripts import read_auth_config
 
 
 def run_save_motd():
@@ -11,4 +11,4 @@ def run_save_motd():
         return str(Error)
 
 
-run_save_motd()
+print(run_save_motd())

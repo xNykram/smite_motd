@@ -1,5 +1,4 @@
-from app.smiteapi.smiteobjects import Match, Player, PlayerEntry
-import sys
+from smiteapi.smiteobjects import Match, PlayerEntry
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22

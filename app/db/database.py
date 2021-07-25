@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from app.smiteapi.smiteapiscripts import read_db_config
+from smiteapi.smiteapiscripts import read_db_config
 
 
 class Database:

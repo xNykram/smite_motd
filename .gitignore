@@ -68,6 +68,6 @@ venv.bak/
 .spyderproject
 .spyproject
 .ropeproject
-/app/dbconfig.json
+/dbconfig.json
 /auth.json
 *.swp
