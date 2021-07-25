@@ -2,7 +2,7 @@ name: GitHub Deploy
 on: [push]
 jobs:
   build:
-    name: Build
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
     - name: deploy
