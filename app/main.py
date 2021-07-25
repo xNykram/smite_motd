@@ -1,5 +1,5 @@
 from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT
-from  analyzer import Analyzer
+from analyzer import Analyzer
 
 
 def sort_and_map(d1, d2):
