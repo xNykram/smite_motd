@@ -5,6 +5,8 @@ from db.database import db
 from urllib.request import urlopen
 import urllib
 from smiteapi.smiteobjects import Player
+from smiteapi.smiteapiscripts import read_auth_config
+
 
 # May be incorrect
 ERROR_CODE_DICT = {
@@ -18,14 +20,16 @@ GODS_DICT = {}
 
 
 class Smite(object):
-    def __init__(self, dev_id, auth_key):
-        self.dev_id = str(dev_id)
-        self.auth_key = str(auth_key)
+    def __init__(self):
+        self.config = read_auth_config()
+        self.dev_id = self.config[0]
+        self.auth_key = self.config[1]
         self.BASE_URL = 'https://api.smitegame.com/smiteapi.svc'
         self.session = None
         self.open_session()
         self.update_items()
         self.update_gods()
+
 
     def create_timestamp(self):
         """returns timestamp needed for api calls"""

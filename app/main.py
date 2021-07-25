@@ -1,6 +1,5 @@
 from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT
 from  analyzer import Analyzer
-from smiteapi.smiteapiscripts import read_auth_config
 
 
 def sort_and_map(d1, d2):
@@ -8,9 +7,16 @@ def sort_and_map(d1, d2):
     return {k: v for k, v in sorted(mapped.items(), key=lambda d: d[1])}
 
 
-keys = read_auth_config()
+smite = Smite()
 
-smite = Smite(keys[0], keys[1])
+test = smite.get_player('LyQsPL')
 
+analyzer = Analyzer(smite)
 
-print(smite.save_motd())
+queue = test.latest_queue(smite)
+date = smite.create_timestamp()[:8]
+
+analyzer.analyze_queue(queue, date, 3)
+
+gods_top = sort_and_map(analyzer.gods, GODS_DICT)
+items_top = sort_and_map(analyzer.items, ITEMS_DICT)
