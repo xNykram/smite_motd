@@ -1,10 +1,10 @@
 from json import load as json_load
-import sys, os
-
+import os
+from pathlib import Path
 
 def read_db_config():
     """read database config that is stored in json"""
-    project_dir = sys.path[1]
+    project_dir = os.path.abspath('..')
     config_dir = os.path.join(project_dir, r"dbconfig.json")
     with open(config_dir, 'r') as dbconfig:
         config = json_load(dbconfig)
@@ -18,7 +18,7 @@ def read_db_config():
 
 def read_auth_config():
     """read auth config that is stored in json"""
-    project_dir = sys.path[1]
+    project_dir = os.path.abspath('..')
     config_dir = os.path.join(project_dir, r"auth.json")
     with open(config_dir, 'r') as authconfig:
         config = json_load(authconfig)
