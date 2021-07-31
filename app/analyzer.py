@@ -1,8 +1,8 @@
 from smiteapi.smiteobjects import Match, PlayerEntry
+from db.database import db
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
-
 
 class Analyzer(object):
     """analyzes smite data"""
@@ -59,12 +59,12 @@ class Analyzer(object):
             print('\rAnalyzed {}/{} games.'.format(count, total), end='', flush=True)
         print('\nQueue {} with {} games analyzed.'.format(queue_id, count))
 
-    def load_to_db(self, db):
+    def load_to_db(self):
         """TODO loads results of analyze into database"""
         pass
 
     
     @staticmethod
-    def from_db(db):
+    def from_db():
         """TODO gets analyzed data from a database and creates a new Analyzer object based on it"""
         pass
