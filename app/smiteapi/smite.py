@@ -133,7 +133,7 @@ class Smite(object):
                 try:
                     sql_command = "INSERT INTO motd (name, description, validDate) VALUES ('{}', '{}', '{}')"\
                         .format(row['name'], row['description'], row['startDateTime'])
-                    db.run_sql_query(sql_command, 'write')
+                    db.query(sql_command)
                 except Exception as e:
                     return 'Unable to update motd: ' + str(e)
 

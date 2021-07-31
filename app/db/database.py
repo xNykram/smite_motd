@@ -1,11 +1,11 @@
-import pymssql
+from pymssql import connect
 from smiteapi.smiteapiscripts import read_db_config
 
 
 class Database:
     def __init__(self):
         (server, user, passwd, dbname) = read_db_config()
-        self.conn = pymssql.connect(server, user, passwd, dbname, autocommit=True)
+        self.conn = connect(server, user, passwd, dbname, autocommit=True)
         self.cursor = self.conn.cursor()
 
     def healthcheck(self):
@@ -23,12 +23,11 @@ class Database:
             return True
         except Exception as err:
             if log:
-                print(str(err))
+                return str(err)
             return False
 
     def print_cursor(self):
         for x in self.cursor:
-            print(x)
-
+            return x
 
 db = Database()
