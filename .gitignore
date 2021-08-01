@@ -71,3 +71,4 @@ venv.bak/
 /app/dbconfig.json
 /app/auth.json
 *.swp
+/smite_lore/dbconfig.json
