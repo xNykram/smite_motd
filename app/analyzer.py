@@ -1,6 +1,7 @@
 from smiteapi.smiteobjects import Match, PlayerEntry
 from db.database import db
 from ast import literal_eval
+from functools import reduce
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
@@ -15,6 +16,12 @@ def str_to_dict(dict_str):
     """makes dictionary from string"""
     return literal_eval(dict_str)
 
+def accumulate_dict(first, second):
+    result = first.copy()
+    for k in second:
+        result[k] = first.get(k, 0) + second.get(k, 0)
+    return result
+
 class ResultSet(object):
     """container for raw analyze results"""
     def __init__(self, is_completed=True):
@@ -25,7 +32,10 @@ class ResultSet(object):
 
     def accumulate(self, other):
         """TODO: sum up two result sets"""
-        pass
+        instance = ResultSet()
+        instance.is_completed = self.is_completed and other.is_completed 
+        instance.gods = accumulate_dict(self.gods, second.gods)
+        instance.items = accumulate_dict(self.items, seconds.items)
 
     def serialize(self):
         """return series of string and ints which representates this object"""
@@ -112,6 +122,9 @@ class Analyzer(object):
             (queue_id, date) = item[0]
             return item[1].load_to_db(queue_id, date)
 
+    def accumulated_result(self):
+        rs = list(self.results.values())
+        return reduce(ResultSet.accumulate, rs)
     
     @staticmethod
     def from_db(api=None):
