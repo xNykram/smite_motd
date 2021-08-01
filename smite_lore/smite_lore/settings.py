@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-2&_49v#j%8288fm-y(9fogao*lz)c7#=q-=y_2^xdcs21iaxs(
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['51.68.140.249', 'www.nykram.pl', 'http://nykram.pl', 'localhost']
+ALLOWED_HOSTS = ['51.68.140.249', 'www.nykram.pl', 'http://nykram.pl', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'smite_lore',
 ]
 
 MIDDLEWARE = [
