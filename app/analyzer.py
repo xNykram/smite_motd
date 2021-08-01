@@ -6,25 +6,29 @@ from ast import literal_eval
 MAX_BATCH = 22
 
 def date_api_to_sql(date):
+    """reformat dates as YYYYMMDD -> YYYY-MM-DD"""
     if len(date) < 8:
         return ''
     return date[:4] + '-' + date[4:6] + '-' + date[6:8]
 
 def str_to_dict(dict_str):
+    """makes dictionary from string"""
     return literal_eval(dict_str)
 
 class ResultSet(object):
+    """container for raw analyze results"""
     def __init__(self, is_completed=True):
-        self.is_completed = is_completed 
-        self.analyzed_count = 0
-        self.gods = {}
-        self.items = {}
+        self.is_completed = is_completed # true if result comes from a analyze performed on whole day 
+        self.analyzed_count = 0 # count of analzyed games
+        self.gods = {} # dict of (god_id, count)
+        self.items = {} # dict of (item_id, count)
 
     def accumulate(self, other):
-        """sum up two result sets"""
+        """TODO: sum up two result sets"""
         pass
 
     def serialize(self):
+        """return series of string and ints which representates this object"""
         gods_str = 'NULL'
         items_str = 'NULL'
         completed = 0
@@ -35,20 +39,21 @@ class ResultSet(object):
         if self.is_completed:
             completed = 1
 
-
         return (completed, gods_str, items_str)
     
     def load_to_db(self, queue_id, api_date):
+        """inserts result set into database along with queue_id and date"""
         query = """INSERT INTO analyzer (queue_id, date, is_completed, gods, items, analyzed_count) VALUES ({}, '{}', {}, '{}', '{}', {})"""
         data = self.serialize()
         date = date_api_to_sql(api_date)
         query = query.format(queue_id, date, data[0], data[1], data[2], self.analyzed_count)
+
         return db.query(query, log=True)
 
 class Analyzer(object):
     """analyzes smite data"""
     def __init__(self, api, match_ids=[]):
-        self.api = api
+        self.api = api # needed for api calls
         self.results = {} # dict of {(int, date), ResultSet} 
 
     def analyze(self, match, result_set):
@@ -102,6 +107,7 @@ class Analyzer(object):
         self.results[(queue_id, date)] = result_set 
 
     def load_to_db(self):
+        """loads analyzer results to database"""
         for item in self.results.items():
             (queue_id, date) = item[0]
             return item[1].load_to_db(queue_id, date)
@@ -109,7 +115,7 @@ class Analyzer(object):
     
     @staticmethod
     def from_db(api=None):
-        """TODO gets analyzed data from a database and creates a new Analyzer object based on it"""
+        """builds analyzer object basing on data from database"""
         query = 'SELECT queue_id, CONVERT(varchar, date, 112), is_completed, gods, items FROM analyzer'
         instance = Analyzer(api)
         if not db.query(query, log=True):
