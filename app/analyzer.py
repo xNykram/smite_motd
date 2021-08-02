@@ -69,8 +69,6 @@ class Analyzer(object):
     """analyzes smite data"""
     def __init__(self, match_ids=[]):
         self.results = {} # dict of {(int, date), ResultSet}
-        self.in_progress = [] # queues analysis in progress
-        self.screen = None
 
     def analyze(self, match, result_set):
         """analyzes single match object"""
@@ -80,7 +78,6 @@ class Analyzer(object):
                 if item == ' ':
                     continue
                 result_set.items[item] = result_set.items.get(item, 0) + 1
-
 
     # since smite-api returns PlayerEntries(raw) instead of raw matches
     # we have to handle it separately
@@ -105,11 +102,8 @@ class Analyzer(object):
             self.analyze(match, result_set)
         return index + 1
 
-    def analyze_queue(self, api, queue_id, date, hour=-1, log=-1):
+    def analyze_queue(self, api, queue_id, date, hour=-1, log=-1, screen=None):
         """calls for all games from the given queue and analyzes them"""
-        if self.screen is None and log >= 0:
-            self.screen = curses.initscr()
-        self.in_progress.append(queue_id)
         response = api.make_request('getmatchidsbyqueue', [queue_id, date, hour])
         ids = list(map(lambda d: d['Match'], response))
         result_set = ResultSet(hour == -1)
@@ -117,38 +111,27 @@ class Analyzer(object):
         count = 0
         queue_name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
         while ids != []:
+            if log >= 0 and screen is not None:
+                buffer = 'Analyzed {}/{} ({}%) {} games.'
+                buffer = buffer.format(count, total, int((count/total)*100), queue_name)
+                screen.addstr(log, 0, buffer)
+                screen.refresh()
             id_str = ','.join(ids[:MAX_BATCH])
             batch = api.make_request('getmatchdetailsbatch', [id_str])
             ids = ids[MAX_BATCH:]
             count += self.analyze_batch(batch, result_set)
-            if log >= 0:
-                buffer = 'Analyzed {}/{} ({}%) {} games.'
-                buffer = buffer.format(count, total, int((count/total)*100), queue_name)
-                self.screen.addstr(screen_id, 0, buffer)
-                self.screen.refresh()
+        if log >= 0 and screen is not None:
+            buffer = 'Completed {} analysis with {} games!'.format(queue_name, count)
+            screen.addstr(log, 0, buffer)
+            screen.refresh()
         result_set.analyzed_count = count
         self.results[(queue_id, date)] = result_set
-        self.in_progress.remove(queue_id)
-
-    def analyze_all_queues(self, date, hour=-1):
-        self.screen = curses.initscr()
-        self.is_analyzing = True
-        count = 0
-        for queue_id in QUEUES_DICT:
-            thread = Thread(target=self.analyze_queue, args=(Smite(), queue_id, date, hour, count))
-            thread.start()
-            count += 1
-        while self.in_progress != []:
-            sleep(0.5)
-        curses.endwin()
-        self.screen = None
-        print('Analysis completed')
 
     def load_to_db(self):
         """loads analyzer results to database"""
         for item in self.results.items():
             (queue_id, date) = item[0]
-            return item[1].load_to_db(queue_id, date)
+            item[1].load_to_db(queue_id, date)
 
     def accumulated_result(self):
         rs = list(self.results.values())
