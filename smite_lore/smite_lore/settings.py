@@ -54,7 +54,7 @@ with open('dbconfig.json', 'r') as file:
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
+        'ENGINE': 'mysql',
         'NAME': config['database']['dbname'],
         'USER': config['database']['login'],
         'PASSWORD': config['database']['password'],
