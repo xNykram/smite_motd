@@ -17,19 +17,54 @@ ERROR_CODE_DICT = {
 
 ITEMS_DICT = {}
 GODS_DICT = {}
+QUEUES_DICT = {
+    448: 'Joust',
+    434: 'MOTD',
+    435: 'Arena',
+    426: 'Conquest',
+    445: 'Assault',
+    466: 'Clash',
+    451: 'Conquest(R)',
+    450: 'Joust(R)',
+    440: 'Joust Solo(R)',
+    459: 'Siege'
+}
+
+AUTH = read_auth_config()
+
+
+def validate_sessions(sessions):
+    """removes not vaild sessions from sessions array"""
+    for smite_obj in sessions:
+        if not smite_obj.test_session():
+            sessions.remove(smite_obj)
+
+def ensure_sessions(sessions, n):
+    """makes sure that sessions array contains n Smite objects"""
+    while n > len(sessions):
+        instance = Smite()
+        if instance.test_session():
+            sessions.append(Smite())
+        else:
+            break
+    return len(sessions)
 
 
 class Smite(object):
-    def __init__(self):
-        self.config = read_auth_config()
-        self.dev_id = self.config[0]
-        self.auth_key = self.config[1]
+    def __init__(self, session=None):
+        self.dev_id = AUTH[0]
+        self.auth_key = AUTH[1]
         self.BASE_URL = 'https://api.smitegame.com/smiteapi.svc'
-        self.session = None
-        self.open_session()
-        self.update_items()
-        self.update_gods()
+        self.session = session
+        if self.session is None:
+            self.open_session()
+            self.update_items()
+            self.update_gods()
 
+    def test_session(self):
+        response = self.make_request('testsession') 
+        # first character of API success response is 'T'
+        return response is not None and response[0] == 'T'
 
     def create_timestamp(self):
         """returns timestamp needed for api calls"""
@@ -55,7 +90,7 @@ class Smite(object):
                                + self.auth_key.encode('utf-8')
                                + self.create_timestamp().encode('utf-8')).hexdigest()
 
-    def open_session(self):
+    def open_session(self, log=False):
         """attempts to open a new session"""
         signature = self.create_signature('createsession')
         url = '{0}/createsessionJson/{1}/{2}/{3}'.format(self.BASE_URL,
@@ -65,9 +100,11 @@ class Smite(object):
         try:
             html = urlopen(url).read()
             self.session = json.loads(html.decode('utf-8'))['session_id']
-            print("Smite API connected. Session id: {0}".format(self.session))
+            if log:
+                print("New session connected. Session id: {0}".format(self.session))
         except urllib.error.HTTPError as e:
-            print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
+            if log:
+                print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
 
     def create_request(self, name, params=None):
         """return request string based on name and params"""

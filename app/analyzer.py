@@ -2,6 +2,10 @@ from smiteapi.smiteobjects import Match, PlayerEntry
 from db.database import db
 from ast import literal_eval
 from functools import reduce
+from smiteapi.smite import Smite, QUEUES_DICT
+from threading import Thread
+import curses
+from time import sleep
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
@@ -34,8 +38,9 @@ class ResultSet(object):
         """TODO: sum up two result sets"""
         instance = ResultSet()
         instance.is_completed = self.is_completed and other.is_completed 
-        instance.gods = accumulate_dict(self.gods, second.gods)
-        instance.items = accumulate_dict(self.items, seconds.items)
+        instance.gods = accumulate_dict(self.gods, other.gods)
+        instance.items = accumulate_dict(self.items, other.items)
+        return instance
 
     def serialize(self):
         """return series of string and ints which representates this object"""
@@ -50,7 +55,7 @@ class ResultSet(object):
             completed = 1
 
         return (completed, gods_str, items_str)
-    
+
     def load_to_db(self, queue_id, api_date):
         """inserts result set into database along with queue_id and date"""
         query = """INSERT INTO analyzer (queue_id, date, is_completed, gods, items, analyzed_count) VALUES ({}, '{}', {}, '{}', '{}', {})"""
@@ -62,9 +67,8 @@ class ResultSet(object):
 
 class Analyzer(object):
     """analyzes smite data"""
-    def __init__(self, api, match_ids=[]):
-        self.api = api # needed for api calls
-        self.results = {} # dict of {(int, date), ResultSet} 
+    def __init__(self, match_ids=[]):
+        self.results = {} # dict of {(int, date), ResultSet}
 
     def analyze(self, match, result_set):
         """analyzes single match object"""
@@ -74,7 +78,6 @@ class Analyzer(object):
                 if item == ' ':
                     continue
                 result_set.items[item] = result_set.items.get(item, 0) + 1
-        
 
     # since smite-api returns PlayerEntries(raw) instead of raw matches
     # we have to handle it separately
@@ -99,33 +102,41 @@ class Analyzer(object):
             self.analyze(match, result_set)
         return index + 1
 
-    def analyze_queue(self, queue_id, date, hour=-1):
+    def analyze_queue(self, api, queue_id, date, hour=-1, log=-1, screen=None):
         """calls for all games from the given queue and analyzes them"""
-        response = self.api.make_request('getmatchidsbyqueue', [queue_id, date, hour])
+        response = api.make_request('getmatchidsbyqueue', [queue_id, date, hour])
         ids = list(map(lambda d: d['Match'], response))
         result_set = ResultSet(hour == -1)
         total = len(ids)
         count = 0
+        queue_name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
         while ids != []:
+            if log >= 0 and screen is not None:
+                buffer = 'Analyzed {}/{} ({}%) {} games.'
+                buffer = buffer.format(count, total, int((count/total)*100), queue_name)
+                screen.addstr(log, 0, buffer)
+                screen.refresh()
             id_str = ','.join(ids[:MAX_BATCH])
-            batch = self.api.make_request('getmatchdetailsbatch', [id_str])
+            batch = api.make_request('getmatchdetailsbatch', [id_str])
             ids = ids[MAX_BATCH:]
             count += self.analyze_batch(batch, result_set)
-            print('\rAnalyzed {}/{} games.'.format(count, total), end='', flush=True)
-        print('\nQueue {} with {} games analyzed.'.format(queue_id, count))
+        if log >= 0 and screen is not None:
+            buffer = 'Completed {} analysis with {} games!'.format(queue_name, count)
+            screen.addstr(log, 0, buffer)
+            screen.refresh()
         result_set.analyzed_count = count
-        self.results[(queue_id, date)] = result_set 
+        self.results[(queue_id, date)] = result_set
 
     def load_to_db(self):
         """loads analyzer results to database"""
         for item in self.results.items():
             (queue_id, date) = item[0]
-            return item[1].load_to_db(queue_id, date)
+            item[1].load_to_db(queue_id, date)
 
     def accumulated_result(self):
         rs = list(self.results.values())
         return reduce(ResultSet.accumulate, rs)
-    
+
     @staticmethod
     def from_db(api=None):
         """builds analyzer object basing on data from database"""
@@ -133,7 +144,7 @@ class Analyzer(object):
         instance = Analyzer(api)
         if not db.query(query, log=True):
             return None
-        
+
         response = db.cursor.fetchall()
 
         for item in response:
