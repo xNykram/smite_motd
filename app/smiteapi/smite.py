@@ -6,6 +6,7 @@ from urllib.request import urlopen
 import urllib
 from smiteapi.smiteobjects import Player
 from smiteapi.smiteapiscripts import read_auth_config
+from tools import map_with_threads
 
 
 # May be incorrect
@@ -35,19 +36,23 @@ AUTH = read_auth_config()
 
 def validate_sessions(sessions):
     """removes not vaild sessions from sessions array"""
-    for smite_obj in sessions:
+    def validate(smite_obj):
         if not smite_obj.test_session():
             sessions.remove(smite_obj)
+    map_with_threads(fun=validate, container=sessions)
+    return len(sessions)
+
 
 def ensure_sessions(sessions, n):
     """makes sure that sessions array contains n Smite objects"""
-    while n > len(sessions):
+    def ensure(dummy):
         instance = Smite()
         if instance.test_session():
-            sessions.append(Smite())
-        else:
-            break
+            sessions.append(instance)
+    map_with_threads(fun=ensure, container=list(range(0, n - len(sessions))))
     return len(sessions)
+
+
 
 
 class Smite(object):

@@ -32,10 +32,10 @@ count = ensure_sessions(sessions, size)
 write_latest_sessions(sessions)
 
 if count != size:
-    screen.addstr(3, 0, '''Error, couldn't ensure {} api sessions.'''.format(size))
+    screen.addstr(3, 0, '''Error, couldn't ensure {} api sessions ({} available).'''.format(size, count))
     screen.refresh()
     write_latest_sessions(sessions)
-    sleep(1)
+    sleep(5)
     curses.endwin()
     exit(-1)
 
@@ -54,7 +54,7 @@ date = sessions[0].create_timestamp()[:8] # today
 threads = []
 index = 0
 for queue_id in QUEUES_DICT:
-    thread = Thread(target=analyzer.analyze_queue, args=[sessions[index], queue_id, date, 23, index, screen])
+    thread = Thread(target=analyzer.analyze_queue, args=[sessions[index], queue_id, date, -1, index, screen])
     threads.append(thread)
     thread.start()
     index += 1
