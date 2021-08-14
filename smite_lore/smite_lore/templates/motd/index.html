@@ -18,9 +18,9 @@
             <h4>TODAY'S MOTD</h4>
             {% for row in todays_motd %}
                 <div class="motdcell" style="padding:10px;">
-                    {{row.name}}<br>
-                    {{row.description}}<br>
-                    {{row.date}}
+                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
+                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
+                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
@@ -28,9 +28,9 @@
             <h4>FUTURE MOTD</h4>
             {% for row in future_motd %}
                 <div class="motdcell" style="padding:10px;">
-                    {{row.name}}<br>
-                    {{row.description}}<br>
-                    {{row.date}}
+                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
+                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
+                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
@@ -38,9 +38,9 @@
             <h4>ARCHIV MOTD</h4>
             {% for row in archiv_motd %}
                 <div class="motdcell" style="padding:10px;">
-                    {{row.name}}<br>
-                    {{row.description}}<br>
-                    {{row.date}}
+                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
+                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
+                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
