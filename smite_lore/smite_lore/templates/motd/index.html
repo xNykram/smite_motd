@@ -12,7 +12,7 @@
 <body>
     <div class="main-con">
         <div class="main-con-title">
-            SMITE MOTD
+                <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 13%; width: 200px;">
         </div>
 
         <div class="main-sections main-con-today">
@@ -44,6 +44,9 @@
                     <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="footer">
+            &#169; 2021 Nykram. All rights reserved.
         </div>
     </div>
 </body>
