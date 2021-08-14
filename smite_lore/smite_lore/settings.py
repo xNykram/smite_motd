@@ -54,13 +54,13 @@ with open('dbconfig.json', 'r') as file:
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
+        'ENGINE': 'sql_server.pyodbc',
         'NAME': config['database']['dbname'],
         'USER': config['database']['login'],
         'PASSWORD': config['database']['password'],
         'HOST': config['database']['server_name'],
         'PORT': "1433",
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server"},
+        "OPTIONS": {'driver': 'ODBC Driver 17 for SQL Server'},
     }
 }
 
@@ -87,7 +87,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 STATIC_URL = '/static/'
 
