@@ -1,5 +1,7 @@
 from pathlib import Path
 from json import load
+import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,7 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'smite_lore',
 ]
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static/"),
+)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
