@@ -20,10 +20,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'smite_lore',
 ]
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static/"),
-)
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = '/media/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -95,5 +94,7 @@ USE_L10N = True
 USE_TZ = False
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
