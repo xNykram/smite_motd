@@ -39,3 +39,10 @@ body {
     margin-right: 8%;
     text-align: left;
 }
+
+.footer {
+    font-size: 10px;
+    padding: 5px;
+    font-family: 'Roboto';
+    margin: auto;
+}
