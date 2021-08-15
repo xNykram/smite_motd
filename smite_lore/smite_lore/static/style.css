@@ -34,9 +34,9 @@ body {
 .main-sections h4 {
     padding: 15px;
 }
-.main-sections div {
-    margin-left: 8%;
-    margin-right: 8%;
+.main-sections .motdcell {
+    margin-left: 15%;
+    margin-right: 15%;
     text-align: left;
 }
 
@@ -45,4 +45,17 @@ body {
     padding: 5px;
     font-family: 'Roboto';
     margin: auto;
+}
+.motdcell {
+    padding: 10px;
+}
+.motdcell div {
+    font-size: 15px;
+    padding: 5px;
+}
+.motdcell .motdname{
+    font-size: 25px;
+}
+.motdcell .motddesc div {
+   
 }
