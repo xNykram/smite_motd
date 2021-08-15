@@ -165,8 +165,8 @@ class Smite(object):
         for row in response:
             mdate = datetime.strptime((row['startDateTime'][:-11]), '%m/%d/%Y')
             if mdate > date and mdate < date_future:
-                row['description'] = row['description'].replace("<li>", " ")\
-                    .replace("</li>", " ")
+                row['description'] = row['description'].replace("<li>", "<div>")\
+                    .replace("</li>", "</div>")
                 try:
                     sql_command = "INSERT INTO smite_lore_motd (name, description, date) VALUES ('{}', '{}', '{}')"\
                         .format(row['name'], row['description'], row['startDateTime'])
@@ -180,3 +180,5 @@ class Smite(object):
         dt = datetime.now()
         dt.strftime('%m/%d/%Y %H:%M:%S')
         return dt
+sm = Smite()
+sm.save_motd()

@@ -20,27 +20,27 @@
             {% for row in todays_motd %}
                 <div class="motdcell" style="padding:10px;">
                     <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
+                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description | safe}}</div>
                     <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
         <div class="main-sections main-con-next">
             <h4>FUTURE MOTD</h4>
-            {% for row in future_motd %}
-                <div class="motdcell" style="padding:10px;">
-                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
-                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
-                </div>
-            {% endfor %}
+                {% for row in future_motd %}
+                    <div class="motdcell" style="padding:10px;">
+                        <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name|safe}}</div>
+                        <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description | safe}}</div>
+                        <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
+                    </div>
+                {% endfor %}
         </div>
         <div class="main-sections main-con-prev">
             <h4>ARCHIV MOTD</h4>
             {% for row in archiv_motd %}
                 <div class="motdcell" style="padding:10px;">
                     <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
+                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description | safe}}</div>
                     <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
                 </div>
             {% endfor %}
@@ -50,4 +50,5 @@
         </div>
     </div>
 </body>
+
 </html>
