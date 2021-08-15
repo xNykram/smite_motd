@@ -56,6 +56,11 @@ body {
 .motdcell .motdname{
     font-size: 25px;
 }
-.motdcell .motddesc div {
-   
+.motdcell .motddesc li {
+   padding: 5px;
+}
+
+li:first-child {
+    list-style-type: none;
+    text-decoration: none;
 }
