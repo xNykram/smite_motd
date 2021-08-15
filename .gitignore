@@ -74,3 +74,4 @@ venv.bak/
 /smite_lore/dbconfig.json
 smite_lore/dbconfig.json
 smite_lore/smite_lore/settings.py
+/smite_lore/smite_lore/settings.py
