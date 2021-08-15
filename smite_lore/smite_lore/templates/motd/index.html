@@ -12,36 +12,36 @@
 <body>
     <div class="main-con">
         <div class="main-con-title">
-                <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 13%; width: 200px;">
+                <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 14%; width: 200px;">
         </div>
 
         <div class="main-sections main-con-today">
             <h4>TODAY'S MOTD</h4>
             {% for row in todays_motd %}
-                <div class="motdcell" style="padding:10px;">
-                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
-                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
+                <div class="motdcell">
+                    <div class="motdname">{{row.name}}</div>
+                    <div class="motddesc">{{row.description | safe}}</div>
+                    <div class="motddate">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
         <div class="main-sections main-con-next">
             <h4>FUTURE MOTD</h4>
-            {% for row in future_motd %}
-                <div class="motdcell" style="padding:10px;">
-                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
-                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
-                </div>
-            {% endfor %}
+                {% for row in future_motd %}
+                    <div class="motdcell">
+                        <div class="motdname">{{row.name|safe}}</div>
+                        <div class="motddesc">{{row.description | safe}}</div>
+                        <div class="motddate">{{row.date}}</div>
+                    </div>
+                {% endfor %}
         </div>
         <div class="main-sections main-con-prev">
             <h4>ARCHIV MOTD</h4>
             {% for row in archiv_motd %}
-                <div class="motdcell" style="padding:10px;">
-                    <div class="motdname" style="font-size: 25px; padding: 5px;">{{row.name}}</div>
-                    <div class="motddesc" style="font-size: 15px; padding: 5px;">{{row.description}}</div>
-                    <div class="motddate" style="font-size: 15px; padding: 5px;">{{row.date}}</div>
+                <div class="motdcell">
+                    <div class="motdname">{{row.name}}</div>
+                    <div class="motddesc">{{row.description | safe}}</div>
+                    <div class="motddate">{{row.date}}</div>
                 </div>
             {% endfor %}
         </div>
@@ -50,4 +50,5 @@
         </div>
     </div>
 </body>
+
 </html>
