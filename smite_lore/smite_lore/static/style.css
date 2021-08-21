@@ -64,3 +64,48 @@ li:first-child {
     list-style-type: none;
     text-decoration: none;
 }
+.gods-pref .gods-bar .god .god-image img{
+    width: 100px;
+}
+
+.gods-pref .gods-bar{
+    padding: 8px;
+}
+.gods-pref .gods-bar .god .god-name {
+    font-size :15px;
+}
+.gods-pref {
+    display: flex;
+    justify-content: left;
+    margin-left: 15%;
+    flex-direction: column;
+}
+.gods-pref .gods-pref-title{
+    text-align:left;
+    font-size: 20px;
+}
+.gods-pref .gods-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items:left;
+    width: auto;
+}
+.gods-pref .gods-bar .god .god-name{
+    text-align: center;
+    padding: 3px;
+    letter-spacing: 1.5px;
+    }
+.gods-pref .gods-bar .god div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    justify-content: center;
+}
+.gods-pref .gods-bar .god .god-wr {
+    font-size: 14px;
+    padding: 1px;
+    letter-spacing: 1.1px;
+    color: #C0C0C0;
+}

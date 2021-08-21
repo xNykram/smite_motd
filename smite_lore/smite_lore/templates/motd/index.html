@@ -46,6 +46,20 @@
                     <div class="motddesc">{{row.description | safe}}</div>
                     <div class="motddate">{{row.date}}</div>
                 </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                        {% if god.motdID == row.motdID %}
+                            <div class="god">
+                                <div class="god-image"><img src={{god.godImageUrl}}></div>
+                                <div class="god-name">{{god.godName}}</div>
+                                <div class="god-wr">Win Ratio: 99%</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
             {% endfor %}
         </div>
         <div class="footer">

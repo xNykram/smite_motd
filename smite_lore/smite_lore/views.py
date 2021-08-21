@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Motd
+from .models import Motd, PrefGodsForMotd
 from datetime import datetime, timedelta
 
 
@@ -14,5 +14,8 @@ def match_list(request):
     todays_motd = Motd.objects.filter(date__day=today)
     future_motd = Motd.objects.filter(date__range=[tomorrow, future])
     archiv_motd = Motd.objects.filter(date__range=[oldest_motd, yesterday]).order_by('-date')
+    gods = PrefGodsForMotd.objects.all()
+    list_of_motds = ListOfMotds.objects.all()
     return render(request, 'motd/index.html', {'todays_motd': todays_motd, 'future_motd': future_motd,
-                                               'archiv_motd': archiv_motd})
+                                               'archiv_motd': archiv_motd, 'gods': gods,
+                                               'list_of_motds': list_of_motds})
