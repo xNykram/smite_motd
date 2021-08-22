@@ -58,7 +58,7 @@ with open('dbconfig.json', 'r') as file:
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
+        'ENGINE': 'mssql',
         'NAME': config['database']['dbname'],
         'USER': config['database']['login'],
         'PASSWORD': config['database']['password'],
