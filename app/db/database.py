@@ -20,10 +20,12 @@ class Database:
         """send a request to the database"""
         try:
             self.cursor.execute(query)
+            if log:
+                print('Success')
             return True
         except Exception as err:
             if log:
-                return str(err)
+                print(str(err))
             return False
 
     def print_cursor(self):
