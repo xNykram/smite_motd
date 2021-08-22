@@ -20,17 +20,17 @@
 
         <div class="main-sections main-con-today">
             <h4>TODAY'S MOTD</h4>
-            {% for row in todays_motd %}
+            {% for motd in todays_motd %}
                 <div class="motdcell">
-                    <div class="motdname">{{row.name}}</div>
-                    <div class="motddesc">{{row.description | safe}}</div>
-                    <div class="motddate">{{row.date}}</div>
+                    <div class="motdname">{{motd.name}}</div>
+                    <div class="motddesc">{{motd.description | safe}}</div>
+                    <div class="motddate">{{motd.date}}</div>
                 </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == row.name %}
+                        {% if god.motdName == motd.name %}
                             <div class="god">
                                 <div class="god-image"><img src={{god.godImageUrl}}></div>
                                 <div class="god-name">{{god.godName}}</div>
@@ -44,17 +44,17 @@
         </div>
         <div class="main-sections main-con-next">
             <h4>FUTURE MOTD'S</h4>
-                {% for row in future_motd %}
+                {% for motd in future_motd %}
                     <div class="motdcell">
-                        <div class="motdname">{{row.name|safe}}</div>
-                        <div class="motddesc">{{row.description | safe}}</div>
-                        <div class="motddate">{{row.date}}</div>
+                        <div class="motdname">{{motd.name|safe}}</div>
+                        <div class="motddesc">{{motd.description | safe}}</div>
+                        <div class="motddate">{{motd.date}}</div>
                     </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == row.name %}
+                        {% if god.motdName == motd.name %}
                             <div class="god">
                                 <div class="god-image"><img src={{god.godImageUrl}}></div>
                                 <div class="god-name">{{god.godName}}</div>
@@ -68,17 +68,17 @@
         </div>
         <div class="main-sections main-con-prev">
             <h4>ARCHIV MOTD</h4>
-            {% for row in archiv_motd %}
+            {% for motd in archiv_motd %}
                 <div class="motdcell">
-                    <div class="motdname">{{row.name}}</div>
-                    <div class="motddesc">{{row.description | safe}}</div>
-                    <div class="motddate">{{row.date}}</div>
+                    <div class="motdname">{{motd.name}}</div>
+                    <div class="motddesc">{{motd.description | safe}}</div>
+                    <div class="motddate">{{motd.date}}</div>
                 </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == row.name %}
+                        {% if god.motdName == motd.name %}
                             <div class="god">
                                 <div class="god-image"><img src={{god.godImageUrl}}></div>
                                 <div class="god-name">{{god.godName}}</div>
