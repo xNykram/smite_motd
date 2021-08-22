@@ -33,6 +33,7 @@ class PlayerEntry(object):
         self.name = data['playerName']
         self.id = data['playerId']
         self.god_id = data['GodId']
+        self.win_status = data['Win_Status']
         self.items = []
         self.actives = []
         for i in range(1, 3):
