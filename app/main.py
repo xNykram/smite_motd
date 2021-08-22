@@ -39,36 +39,46 @@ if count != size:
     curses.endwin()
     exit(-1)
 
-screen.addstr(3, 0, '''Done. Starting analysis...''')
+smite = sessions[0]
+
+screen.addstr(3, 0, f'Ensured {count} sessions.')
+screen.refresh()
+sleep(1)
+
+date = smite.create_timestamp()[:8] # today
+screen.addstr(4, 0, 'Starting analysis...')
 screen.refresh()
 sleep(1)
 
 screen.clear()
 screen.refresh()
-
+              
 # analysis here
 
 analyzer = Analyzer()
-date = sessions[0].create_timestamp()[:8] # today
-
-threads = []
+#analyzer.analyze_match_list(match_ids, sessions=sessions, screen=screen)
 index = 0
-for queue_id in QUEUES_DICT:
-    thread = Thread(target=analyzer.analyze_queue, args=[sessions[index], queue_id, date, -1, index, screen])
-    threads.append(thread)
-    thread.start()
+
+to_analyze = {}
+
+for queue_id, queue_name in QUEUES_DICT.items():
+    buffer = f'Downloading match ids for {queue_name}...'
+    screen.addstr(index, 0, buffer)
+    screen.refresh()
+    to_analyze[queue_id] = smite.get_match_ids(queue_id, date, hour=1)
+    screen.addstr(index, len(buffer), 'DONE!') 
+    screen.refresh()
     index += 1
 
-while threads != []:
-    for thread in threads:
-        if not thread.is_alive():
-            threads.remove(thread)
-    sleep(0.5)
-
-screen.addstr(index + 2, 0, 'Pushing results to database...')
-screen.refresh()
-analyzer.load_to_db()
-
+for queue_id, queue_name in QUEUES_DICT.items():
+    buffer = f'Analyzing {queue_name} ...'
+    screen.addstr(index, 0, buffer)
+    screen.refresh()
+    rs = analyzer.analyze_match_list(to_analyze[queue_id], sessions=sessions, screen=screen, log_index=index+1)
+    analyzer.results[(queue_id, date)] = rs
+    rs.load_to_db(queue_id, date, log=False)
+    index += 2
+                  
 screen.addstr(index + 3, 0, '...done')
 screen.refresh()
 sleep(5)

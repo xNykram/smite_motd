@@ -5,7 +5,7 @@ from db.database import db
 from urllib.request import urlopen
 import urllib
 from smiteapi.smiteobjects import Player
-from smiteapi.smiteapiscripts import read_auth_config
+from smiteapi.smiteapiscripts import read_auth_config, write_latest_sessions
 from tools import map_with_threads
 
 
@@ -33,6 +33,17 @@ QUEUES_DICT = {
 
 AUTH = read_auth_config()
 
+sessions = []
+
+def ensure_dicts():
+    if ITEMS_DICT != {} and GODS_DICT != {}:
+        pass
+    validate_sessions(sessions)
+    ensure_sessions(sessions, 1)
+    api = sessions[0]
+    api.update_gods()
+    api.update_items()
+
 
 def validate_sessions(sessions):
     """removes not vaild sessions from sessions array"""
@@ -43,13 +54,15 @@ def validate_sessions(sessions):
     return len(sessions)
 
 
-def ensure_sessions(sessions, n):
+def ensure_sessions(sessions, n, save=True):
     """makes sure that sessions array contains n Smite objects"""
     def ensure(dummy):
         instance = Smite()
         if instance.test_session():
             sessions.append(instance)
     map_with_threads(fun=ensure, container=list(range(0, n - len(sessions))))
+    if save:
+        write_latest_sessions(sessions)
     return len(sessions)
 
 
@@ -61,6 +74,7 @@ class Smite(object):
         self.auth_key = AUTH[1]
         self.BASE_URL = 'https://api.smitegame.com/smiteapi.svc'
         self.session = session
+        self.motds = None
         if self.session is None:
             self.open_session()
             self.update_items()
@@ -86,7 +100,7 @@ class Smite(object):
         """calls api and updates arr with gods info from response"""
         gods = self.make_request('getgods', [1])
         for god in gods:
-            arr[god['id']] = god['Name']
+            arr[god['id']] = (god['Name'], god['godIcon_URL'])
 
     def create_signature(self, name):
         """returns hashed signature needed for api calls"""
@@ -106,7 +120,7 @@ class Smite(object):
             html = urlopen(url).read()
             self.session = json.loads(html.decode('utf-8'))['session_id']
             if log:
-                print("New session connected. Session id: {0}".format(self.session))
+                print(html)
         except urllib.error.HTTPError as e:
             if log:
                 print("Error: {0}".format(ERROR_CODE_DICT.get(e.code, e.code)))
@@ -128,8 +142,8 @@ class Smite(object):
             html = urlopen(url).read()
             return json.loads(html.decode('utf-8'))
         except urllib.error.HTTPError as e:
-            print("Couldn't make request [{0}]."
-                  .format(ERROR_CODE_DICT.get(e.code, e.code)))
+            print("Couldn't make request [{}: {}]."
+                  .format(e.code, ERROR_CODE_DICT.get(e.code, 'UNKNOWN CODE')))
             return []
 
     def server_status(self, to_json=True):
@@ -161,6 +175,41 @@ class Smite(object):
             result.append(entry['Match'])
             count += 1
         return result
+
+    def get_match_ids_motd(self, date):
+        """returns match ids for given date from 9AM"""
+        today = datetime.strptime(date, '%Y%m%d')
+        tomorrow = today + timedelta(days=1)
+        today_apistr = today.strftime('%Y%m%d')
+        tomorrow_apistr = tomorrow.strftime('%Y%m%d')
+
+        result = []
+        for hour in range(9, 24):
+            result.extend(self.get_match_ids(434, today_apistr, hour))
+        for hour in range(1, 9):
+            result.extend(self.get_match_ids(434, tomorrow_apistr, hour))
+
+        return result
+        
+    def get_latest_motd(self, days_delta=0):
+        """returns name of motd that was played days_delta ago along with its date, 
+        days_delta(<23) should be small due to api limitations"""
+        if self.motds is None:
+            self.motds = self.make_request('getmotd')
+        start_date_time = self.motds[0]['startDateTime']
+        date_obj = datetime.strptime(start_date_time, '%m/%d/%Y %H:%M:%S %p')
+        today_obj = datetime.today()
+        diff = date_obj - today_obj
+        index = diff.days + 1 + days_delta
+        date_api = (date_obj - timedelta(days=index)).strftime('%Y%m%d') 
+        if index < 0 or index >= len(self.motds):
+            return ('', '')
+        return (self.motds[index]['title'], date_api)
+
+    def get_motd_names(self):
+        if self.motds is None:
+            self.motds = self.make_request('getmotd')
+        return {motd['title'] for motd in self.motds}
 
     def save_motd(self):
         """takes tomorrow's motd and saves it in the database"""
