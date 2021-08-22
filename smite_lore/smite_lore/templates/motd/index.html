@@ -1,23 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="smite, smite motd, motd, smite todays motd">
+    <meta name="description" content="smite motd">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SMITE MOTD</title>
+    <link rel="icon" href="{% static '/smite_icon.png' %}">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025793484206722"
+     crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="main-con">
+        <div class="main-con-title">
+                <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 14%; width: 200px;">
+        </div>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7738678151354224"
-     crossorigin="anonymous"></script>
-<!-- Adv one -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7738678151354224"
-     data-ad-slot="3955100140"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+        <div class="main-sections main-con-today">
+            <h4>TODAY'S MOTD</h4>
+            {% for row in todays_motd %}
+                <div class="motdcell">
+                    <div class="motdname">{{row.name}}</div>
+                    <div class="motddesc">{{row.description | safe}}</div>
+                    <div class="motddate">{{row.date}}</div>
+                </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                        {% if god.motdName == row.name %}
+                            <div class="god">
+                                <div class="god-image"><img src={{god.godImageUrl}}></div>
+                                <div class="god-name">{{god.godName}}</div>
+                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="main-sections main-con-next">
+            <h4>FUTURE MOTD'S</h4>
+                {% for row in future_motd %}
+                    <div class="motdcell">
+                        <div class="motdname">{{row.name|safe}}</div>
+                        <div class="motddesc">{{row.description | safe}}</div>
+                        <div class="motddate">{{row.date}}</div>
+                    </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                        {% if god.motdName == row.name %}
+                            <div class="god">
+                                <div class="god-image"><img src={{god.godImageUrl}}></div>
+                                <div class="god-name">{{god.godName}}</div>
+                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+                {% endfor %}
+        </div>
+        <div class="main-sections main-con-prev">
+            <h4>ARCHIV MOTD</h4>
+            {% for row in archiv_motd %}
+                <div class="motdcell">
+                    <div class="motdname">{{row.name}}</div>
+                    <div class="motddesc">{{row.description | safe}}</div>
+                    <div class="motddate">{{row.date}}</div>
+                </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                        {% if god.motdName == row.name %}
+                            <div class="god">
+                                <div class="god-image"><img src={{god.godImageUrl}}></div>
+                                <div class="god-name">{{god.godName}}</div>
+                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="footer">
+            &#169; 2021 Nykram. All rights reserved.
+        </div>
+    </div>
 </body>
+
 </html>

@@ -219,10 +219,9 @@ class Smite(object):
         for row in response:
             mdate = datetime.strptime((row['startDateTime'][:-11]), '%m/%d/%Y')
             if mdate > date and mdate < date_future:
-                row['description'] = row['description'].replace("<li>", "")\
-                    .replace("</li>", "")
+                row['description'] = row['description']
                 try:
-                    sql_command = "INSERT INTO motd (name, description, validDate) VALUES ('{}', '{}', '{}')"\
+                    sql_command = "INSERT INTO smite_lore_motd (name, description, date) VALUES ('{}', '{}', '{}')"\
                         .format(row['name'], row['description'], row['startDateTime'])
                     db.query(sql_command)
                 except Exception as e:

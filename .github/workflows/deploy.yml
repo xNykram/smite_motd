@@ -1,5 +1,8 @@
 name: Deploy
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     name: Deploy
@@ -15,3 +18,5 @@ jobs:
         script: |
           cd /var/www/git/SmiteAPI-Dev
           sudo git pull
+          sudo systemctl daemon-reload
+          sudo systemctl restart gunicorn

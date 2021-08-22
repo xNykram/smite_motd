@@ -1,5 +1,7 @@
 from pathlib import Path
 from json import load
+import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,6 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'smite_lore',
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,7 +64,7 @@ DATABASES = {
         'PASSWORD': config['database']['password'],
         'HOST': config['database']['server_name'],
         'PORT': "1433",
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server"},
+        "OPTIONS": {'driver': 'ODBC Driver 17 for SQL Server'},
     }
 }
 
@@ -81,14 +85,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -54,3 +54,4 @@ def update_motd_god_ids(motd_name, n=5, analyzer=None):
 
     return top
 
+run_save_motd()
