@@ -14,7 +14,7 @@ analyzer = None
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, 'fa')
+        opts, args = getopt.getopt(argv, 'ma')
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
@@ -22,7 +22,7 @@ def main(argv):
         print_usage()
         sys.exit(2)
     for opt, arg in opts:
-        if opt == '-f':
+        if opt == '-m':
             fill()
         elif opt == '-a':
             analyze_yeasterday()
