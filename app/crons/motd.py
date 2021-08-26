@@ -36,6 +36,7 @@ def update_motd_god_ids(motd_name, n=5, analyzer=None):
         win_count = wins.get(god_id, 0)
         lose_count = loses.get(god_id, 0)
         god_name, icon_url = GODS_DICT.get(god_id, ('', ''))
+        god_name = god_name.replace("'", "''") # fix special chars
         total = win_count + lose_count
         ratio = round(win_count / total, 4) * 100
         if total >= MINIMUM_GAMES_REQUIRED:
@@ -48,10 +49,12 @@ def update_motd_god_ids(motd_name, n=5, analyzer=None):
     columns = '(godID, godImageUrl, godName, motdName, ratio, total, wins, loses)'
     for i in range(0, min(n, len(top))):
         data = top[i]
-        values = f"({data[0]}, '{data[1]}', '{data[2]}', '{motd_name}', {data[3]}, {data[4]}, {data[5]}, {data[6]})"
+        values = f'''({data[0]}, '{data[1]}', '{data[2]}', '{motd_name}', {data[3]}, {data[4]}, {data[5]}, {data[6]})'''
         query = f'INSERT INTO {GOD_ID_DB_NAME} {columns} VALUES {values}'
         db.query(query)
 
     return top
 
-run_save_motd()
+
+if __name__ == '__main__':
+    run_save_motd()
