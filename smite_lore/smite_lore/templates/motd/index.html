@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     {% load static %}
     <link rel="stylesheet" href="{% static '/style.css' %}">
@@ -10,81 +11,92 @@
     <title>SMITE MOTD</title>
     <link rel="icon" href="{% static '/smite_icon.png' %}">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025793484206722"
-     crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="main-con">
         <div class="main-con-title">
-                <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 14%; width: 200px;">
+            <img src="{% static '/smite_icon.png' %}" style="display: flex; margin-left: 14%; width: 200px;">
         </div>
 
         <div class="main-sections main-con-today">
             <h4>TODAY'S MOTD</h4>
             {% for motd in todays_motd %}
-                <div class="motdcell">
-                    <div class="motdname">{{motd.name}}</div>
-                    <div class="motddesc">{{motd.description | safe}}</div>
-                    <div class="motddate">{{motd.date}}</div>
-                </div>
+            <div class="motdcell">
+                <div class="motdname">{{motd.name}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == motd.name %}
-                            <div class="god">
-                                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                                <div class="god-name">{{god.godName}}</div>
-                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
-                            </div>
-                        {% endif %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
+            {% empty %}
+            <div class="main-no-data" style="padding: 5px;">No data to display</div>
             {% endfor %}
         </div>
         <div class="main-sections main-con-next">
             <h4>FUTURE MOTD'S</h4>
-                {% for motd in future_motd %}
-                    <div class="motdcell">
-                        <div class="motdname">{{motd.name|safe}}</div>
-                        <div class="motddesc">{{motd.description | safe}}</div>
-                        <div class="motddate">{{motd.date}}</div>
-                    </div>
+            {% for motd in future_motd %}
+            <div class="motdcell">
+                <div class="motdname">{{motd.name|safe}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == motd.name %}
-                            <div class="god">
-                                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                                <div class="god-name">{{god.godName}}</div>
-                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
-                            </div>
-                        {% endif %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
-                {% endfor %}
+            {% empty %}
+            <div class="main-no-data" style="padding: 5px;">No data to display</div>
+            {% endfor %}
         </div>
         <div class="main-sections main-con-prev">
             <h4>ARCHIV MOTD</h4>
             {% for motd in archiv_motd %}
-                <div class="motdcell">
-                    <div class="motdname">{{motd.name}}</div>
-                    <div class="motddesc">{{motd.description | safe}}</div>
-                    <div class="motddate">{{motd.date}}</div>
-                </div>
+            <div class="motdcell">
+                <div class="motdname">{{motd.name}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
             <div class="gods-pref">
                 <div class="gods-pref-title">Best Gods for this motd:</div>
                 <div class="gods-bar">
                     {% for god in gods %}
-                        {% if god.motdName == motd.name %}
-                            <div class="god">
-                                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                                <div class="god-name">{{god.godName}}</div>
-                                <div class="god-wr"><div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%</div>
-                            </div>
-                        {% endif %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
