@@ -15,5 +15,11 @@ def match_list(request):
     future_motd = Motd.objects.filter(date__range=[tomorrow, future])
     archiv_motd = Motd.objects.filter(date__range=[oldest_motd, yesterday]).order_by('-date')
     gods = PrefGodsForMotd.objects.all()
-    return render(request, 'motd/index.html', {'todays_motd': todays_motd, 'future_motd': future_motd,
+    return render(request, 'motd.html', {'todays_motd': todays_motd, 'future_motd': future_motd,
                                                'archiv_motd': archiv_motd, 'gods': gods})
+def stats(request):
+    return render(request, 'stats.html')
+def analyzer(request):
+    return render(request, 'analyzer.html')
+def contact(request):
+    return render(request, 'contact.html')
