@@ -3,6 +3,8 @@ from .models import Motd, PrefGodsForMotd
 from datetime import datetime, timedelta
 
 
+
+
 def match_list(request):
     tomorrow = datetime.today() + timedelta(days=1)
     tomorrow = tomorrow.replace(hour=00, minute=00)
@@ -17,9 +19,16 @@ def match_list(request):
     gods = PrefGodsForMotd.objects.all()
     return render(request, 'motd.html', {'todays_motd': todays_motd, 'future_motd': future_motd,
                                                'archiv_motd': archiv_motd, 'gods': gods})
+
+
 def stats(request):
     return render(request, 'stats.html')
+
+
 def analyzer(request):
     return render(request, 'analyzer.html')
+
+
 def contact(request):
     return render(request, 'contact.html')
+
