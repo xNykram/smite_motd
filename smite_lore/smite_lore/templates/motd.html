@@ -1,7 +1,8 @@
 {% include "index.html" %}
-
 <div class="main-sections main-con-today">
-    <h4>TODAY'S MOTD</h4>
+    <div class="main-con-title">
+        <h4>TODAY'S MOTD</h4>
+    </div>
     {% for motd in todays_motd %}
     <div class="motdcell">
         <div class="motdname">{{motd.name}}</div>
