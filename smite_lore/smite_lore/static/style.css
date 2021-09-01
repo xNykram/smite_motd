@@ -206,9 +206,8 @@ header{
     }
     .main-sections h4 {
         padding: 5px;
-    }
-    .motdcell{
-        width: 20%;
+        font-size: 25px;
+        text-align: center;
     }
     .motdcell .motddesc{
         padding: 5px;
@@ -217,22 +216,23 @@ header{
         padding: 5px;
     }
     .gods-pref .gods-bar{
-        width: 20%;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
     }
     .gods-pref .gods-bar .god{
-        padding: 10px;
+        padding: 13px;
+        margin: auto;
     }
     .main-sections{
-        height: 850px;
+        height: auto;
     }
-    .footer {
-        width: 20%;
-        text-align: left;
+    .footer{
+        font-size: 10px;
+        font-weight: normal;
+        text-align: center;
     }
-    body {
-        width: 360px;
+    .main-con {
+        width: fit-content;
     }
 }
