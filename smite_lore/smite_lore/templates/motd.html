@@ -1,90 +1,130 @@
-{% include "index.html" %}
-<div class="main-sections main-con-today">
-    <div class="main-con-title">
-        <h4>TODAY'S MOTD</h4>
-    </div>
-    {% for motd in todays_motd %}
-    <div class="motdcell">
-        <div class="motdname">{{motd.name}}</div>
-        <div class="motddesc">{{motd.description | safe}}</div>
-        <div class="motddate">{{motd.date}}</div>
-    </div>
-    <div class="gods-pref">
-        <div class="gods-pref-title">Best Gods for this motd:</div>
-        <div class="gods-bar">
-            {% for god in gods %}
-            {% if god.motdName == motd.name %}
-            <div class="god">
-                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                <div class="god-name">{{god.godName}}</div>
-                <div class="god-wr">
-                    <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="smite, smite motd, motd, smitelore, smite lore, match of the day, smite pref gods">
+    <meta name="description" content="match of the day">
+    <title>Smite - Motd</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static '/smite_logo_small.png' %}">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025793484206722"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-logo">
+                <img alt="logo" src="{% static '/smite_logo.png' %}">
+            </div>
+            <div class="nav-right-panel">
+                <div class="nav-panel-items">
+                    <a href="/">Motd</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="analyzer">Analyzer</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="stats">Stats</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="contact">Contact</a>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
         </div>
-    </div>
-    {% empty %}
-    <div class="main-no-data" style="padding: 5px;">No data to display</div>
-    {% endfor %}
-</div>
-<div class="main-sections main-con-next">
-    <h4>FUTURE MOTD'S</h4>
-    {% for motd in future_motd %}
-    <div class="motdcell">
-        <div class="motdname">{{motd.name|safe}}</div>
-        <div class="motddesc">{{motd.description | safe}}</div>
-        <div class="motddate">{{motd.date}}</div>
-    </div>
-    <div class="gods-pref">
-        <div class="gods-pref-title">Best Gods for this motd:</div>
-        <div class="gods-bar">
-            {% for god in gods %}
-            {% if god.motdName == motd.name %}
-            <div class="god">
-                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                <div class="god-name">{{god.godName}}</div>
-                <div class="god-wr">
-                    <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+    </header>
+    <div class="main-con">
+        <div class="main-sections main-con-today">
+            <div class="main-con-title">
+                <h4>TODAY'S MOTD</h4>
+            </div>
+            {% for motd in todays_motd %}
+            <div class="motdcell">
+                <div class="motdname">{{motd.name}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God: {{god.godName}}" src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-            {% endif %}
+            {% empty %}
+            <div class="main-no-data" style="padding: 5px;">No data to display</div>
             {% endfor %}
         </div>
-    </div>
-    {% empty %}
-    <div class="main-no-data" style="padding: 5px;">No data to display</div>
-    {% endfor %}
-</div>
-<div class="main-sections main-con-prev">
-    <h4>ARCHIV MOTD'S</h4>
-    {% for motd in archiv_motd %}
-    <div class="motdcell">
-        <div class="motdname">{{motd.name}}</div>
-        <div class="motddesc">{{motd.description | safe}}</div>
-        <div class="motddate">{{motd.date}}</div>
-    </div>
-    <div class="gods-pref">
-        <div class="gods-pref-title">Best Gods for this motd:</div>
-        <div class="gods-bar">
-            {% for god in gods %}
-            {% if god.motdName == motd.name %}
-            <div class="god">
-                <div class="god-image"><img src={{god.godImageUrl}}></div>
-                <div class="god-name">{{god.godName}}</div>
-                <div class="god-wr">
-                    <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+        <div class="main-sections main-con-next">
+            <h4>FUTURE MOTD'S</h4>
+            {% for motd in future_motd %}
+            <div class="motdcell">
+                <div class="motdname">{{motd.name|safe}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-            {% endif %}
+            {% empty %}
+            <div class="main-no-data" style="padding: 5px;">No data to display</div>
             {% endfor %}
         </div>
-    </div>
-    {% endfor %}
-    <div class="footer">
-        <i>&#169; 2021 Nykram. All rights reserved.</i>
-    </div>
-</div>
+        <div class="main-sections main-con-prev">
+            <h4>ARCHIV MOTD'S</h4>
+            {% for motd in archiv_motd %}
+            <div class="motdcell">
+                <div class="motdname">{{motd.name}}</div>
+                <div class="motddesc">{{motd.description | safe}}</div>
+                <div class="motddate">{{motd.date}}</div>
+            </div>
+            <div class="gods-pref">
+                <div class="gods-pref-title">Best Gods for this motd:</div>
+                <div class="gods-bar">
+                    {% for god in gods %}
+                    {% if god.motdName == motd.name %}
+                    <div class="god">
+                        <div class="god-image"><img src={{god.godImageUrl}}></div>
+                        <div class="god-name">{{god.godName}}</div>
+                        <div class="god-wr">
+                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="footer">
+                <i>&#169; 2021 Nykram. All rights reserved.</i>
+            </div>
+        </div>
 </body>
+
 </html>
