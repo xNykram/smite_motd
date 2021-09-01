@@ -149,17 +149,19 @@ li:first-child {
     box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.34);
 }
 
+header{
+    width: 90%;
+}
+
 .navbar {
     display: flex;
     flex-direction: row;
-    width: 100%;
     justify-content: space-around;
     align-items: center;
 }
 
 .navbar .nav-logo img {
     width: 200px;
-    padding: 5px;
 }
 
 .navbar .nav-right-panel{
@@ -177,4 +179,60 @@ li:first-child {
 
 .navbar .nav-right-panel .nav-panel-items a:hover{
     color: white;
+}
+
+@media only screen and (max-width: 600px) {
+    header{
+        width: 100%;
+    }
+    .navbar .nav-logo img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .navbar .nav-logo{
+        display: inline-block;
+    }
+    .navbar .nav-right-panel{
+        display: none;
+    }
+    .main-con-title{
+        justify-content: left;
+    }
+    .main-con{
+        width: max-content;
+        justify-content: left;
+        text-align: left;
+    }
+    .main-sections h4 {
+        padding: 5px;
+    }
+    .motdcell{
+        width: 20%;
+    }
+    .motdcell .motddesc{
+        padding: 5px;
+    }
+    .motdcell .motddesc li {
+        padding: 5px;
+    }
+    .gods-pref .gods-bar{
+        width: 20%;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    .gods-pref .gods-bar .god{
+        padding: 10px;
+    }
+    .main-sections{
+        height: 850px;
+    }
+    .footer {
+        width: 20%;
+        text-align: left;
+    }
+    body {
+        width: 360px;
+    }
 }
