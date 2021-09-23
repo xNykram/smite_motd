@@ -74,3 +74,4 @@ venv.bak/
 /smite_lore/dbconfig.json
 smite_lore/dbconfig.json
 /app/latest_sessions.txt
+run.bat
