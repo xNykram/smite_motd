@@ -181,6 +181,14 @@ header{
     color: white;
 }
 
+.main-con .main-title{
+    font-size: 50px;
+    font-family: 'Racing Sans One';
+    letter-spacing: 10px;
+    padding-bottom: 45px;
+    text-align: center;
+}
+
 @media only screen and (max-width: 600px) {
     header{
         width: 100%;
@@ -234,5 +242,8 @@ header{
     }
     .main-con {
         width: fit-content;
+    }
+    .main-con .main-title {
+    font-size: 34px;
     }
 }
