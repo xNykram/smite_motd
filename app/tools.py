@@ -14,4 +14,3 @@ def map_with_threads(fun, container, key=lambda x: x, check_delay=0.5):
             if not thread.is_alive():
                 threads.remove(thread)
         sleep(check_delay)
-
