@@ -32,4 +32,5 @@ class Database:
         for x in self.cursor:
             return x
 
+
 db = Database()

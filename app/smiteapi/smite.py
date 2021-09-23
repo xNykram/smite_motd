@@ -11,9 +11,9 @@ from tools import map_with_threads
 
 # May be incorrect
 ERROR_CODE_DICT = {
-     503: 'Bad request',
-     404: 'Bad request',
-     400: 'API Auth invaild'
+    503: 'Bad request',
+    404: 'Bad request',
+    400: 'API Auth invaild'
 }
 
 ITEMS_DICT = {}
@@ -35,9 +35,10 @@ AUTH = read_auth_config()
 
 sessions = []
 
+
 def ensure_dicts():
     if ITEMS_DICT != {} and GODS_DICT != {}:
-        pass
+        return
     validate_sessions(sessions)
     ensure_sessions(sessions, 1)
     api = sessions[0]
@@ -66,8 +67,6 @@ def ensure_sessions(sessions, n, save=True):
     return len(sessions)
 
 
-
-
 class Smite(object):
     def __init__(self, session=None):
         self.dev_id = AUTH[0]
@@ -81,7 +80,7 @@ class Smite(object):
             self.update_gods()
 
     def test_session(self):
-        response = self.make_request('testsession') 
+        response = self.make_request('testsession')
         # first character of API success response is 'T'
         return response is not None and response[0] == 'T'
 
@@ -105,9 +104,9 @@ class Smite(object):
     def create_signature(self, name):
         """returns hashed signature needed for api calls"""
         return hashlib.md5(self.dev_id.encode('utf-8')
-                               + name.encode('utf-8')
-                               + self.auth_key.encode('utf-8')
-                               + self.create_timestamp().encode('utf-8')).hexdigest()
+                           + name.encode('utf-8')
+                           + self.auth_key.encode('utf-8')
+                           + self.create_timestamp().encode('utf-8')).hexdigest()
 
     def open_session(self, log=False):
         """attempts to open a new session"""
@@ -145,6 +144,15 @@ class Smite(object):
             print("Couldn't make request [{}: {}]."
                   .format(e.code, ERROR_CODE_DICT.get(e.code, 'UNKNOWN CODE')))
             return []
+
+    def request_left(self):
+        try:
+            response = self.make_request('getdataused')
+            total = response[0]['Total_Requests_Today']
+            limit = response[0]['Request_Limit_Daily']
+            return limit - total
+        except:
+            return 0
 
     def server_status(self, to_json=True):
         """calls for server status"""
@@ -190,7 +198,7 @@ class Smite(object):
             result.extend(self.get_match_ids(434, tomorrow_apistr, hour))
 
         return result
-        
+
     def get_latest_motd(self, days_delta=0):
         """returns name of motd that was played days_delta ago along with its date, 
         days_delta(<23) should be small due to api limitations"""
@@ -201,7 +209,7 @@ class Smite(object):
         today_obj = datetime.today()
         diff = date_obj - today_obj
         index = diff.days + 1 + days_delta
-        date_api = (date_obj - timedelta(days=index)).strftime('%Y%m%d') 
+        date_api = (date_obj - timedelta(days=index)).strftime('%Y%m%d')
         if index < 0 or index >= len(self.motds):
             return ('', '')
         return (self.motds[index]['title'], date_api)
