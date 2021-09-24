@@ -2,22 +2,24 @@ import sys
 import getopt
 from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT, QUEUES_DICT, validate_sessions, ensure_sessions
 from threading import Thread
-import curses
 from analyzer import Analyzer, MAX_BATCH
 from smiteapi.smiteapiscripts import read_latest_sessions, write_latest_sessions
 from time import sleep
 from datetime import datetime, timedelta
 from crons.motd import update_motd_god_ids
 
-screen = None
+# Number of top gods inserted to database for each motd
+TOP_COUNT = 10
+
+log_file = None
 sessions = []
 smite = None
 analyzer = None
-log = 0
 initialized = False
 
 
 def main(argv):
+    global log_file
     try:
         opts, args = getopt.getopt(argv, 'mauq:')
     except getopt.GetoptError:
@@ -26,15 +28,21 @@ def main(argv):
     if opts == []:
         print_usage()
         sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-m':
-            fill()
-        elif opt == '-a':
-            analyze_yeasterday()
-        elif opt == '-u':
-            update_all()
-        elif opt == '-q':
-            analyze_update(arg)
+    try:
+        for opt, arg in opts:
+            if opt == '-m':
+                fill()
+            elif opt == '-a':
+                analyze_yeasterday()
+            elif opt == '-u':
+                update_all()
+            elif opt == '-q':
+                analyze_update(arg)
+        sys.exit(1)
+    except:
+        sys.exit(0)
+    finally:
+        log_file.close()
 
 
 def print_usage():
@@ -46,36 +54,34 @@ def print_usage():
     print('-q [id] -- analyzes queue with given id only')
 
 
-def print_curses(msg, y=0, delta=0):
-    global log
-    if screen is None:
-        print(msg)
-    screen.addstr(log + delta, y, msg)
-    screen.refresh()
-    if delta >= 0:
-        log += max(delta, 1)
+def print_log(msg, with_time=True):
+    global log_file
+    if with_time:
+        today = datetime.now()
+        now_str = today.strftime('%d.%m.%Y %H:%M:%S')
+        print(f'[{now_str}] {msg}', file=log_file)
+    else:
+        print(msg, file=log_file)
 
 
 def initialize():
-    global screen, smite, analyzer, log, initialized
+    global smite, analyzer, initialized, log_file
     if initialized:
         return
-    screen = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
+    log_file = open('../log.txt', mode='a')
+    sys.stderr = log_file
 
     # Read latest sessions
 
-    print_curses('Loading existing sessions...')
+    print_log('Loading existing sessions...')
 
     sessions_ids = read_latest_sessions()
     sessions = [Smite(s_id) for s_id in sessions_ids]
     validate_sessions(sessions)  # Check for closed sessions
-    print_curses(f'Found {len(sessions)} existing sessions.')
-    screen.refresh()
+    print_log(f'Found {len(sessions)} existing sessions.')
 
     if len(sessions) == 0:
-        print_curses('Ensuring there is 1 opened sessions...')
+        print_log('Ensuring there is 1 opened sessions...')
         ensure_sessions(sessions, 1)
 
     smite = sessions[0]
@@ -84,13 +90,13 @@ def initialize():
 
 
 def update_all():
-    global analyzer, log
+    global analyzer
     initialize()
     for motd_name in smite.get_motd_names():
         buffer = f'Updating winrate of {motd_name}...'
-        print_curses(buffer)
-        update_motd_god_ids(motd_name)
-        print_curses('DONE!', y=len(buffer)+1, delta=-1)
+        print_log(buffer)
+        update_motd_god_ids(motd_name, n=TOP_COUNT, analyzer=analyzer)
+        print_log(f'{motd_name} updated!')
 
 
 def analyze_update(queue):
@@ -111,32 +117,27 @@ def analyze_yeasterday():
     initialize()
     yeasterday = datetime.now() - timedelta(days=1)
     date = yeasterday.strftime('%Y%m%d')
-    print_curses(f"Yesterday date is {yeasterday.strftime('%d.%m.%Y')}")
+    print_log(f"Yesterday date is {yeasterday.strftime('%d.%m.%Y')}")
     for queue_id, name in QUEUES_DICT.items():
         if not handle_queue(queue_id, date, name):
             break
-    sleep(2)
 
 
 def handle_queue(queue_id, date, name=None):
-    global log
     if name is None:
         name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
     if (queue_id, date) in analyzer.results:
-        print_curses(f'{name} @ {date} is already analyzed. Skipping...')
+        print_log(f'{name} @ {date} is already analyzed. Skipping...')
         return True
     requests = smite.request_left()
     buffer = f'Fetching match list for {name} @ {date}...'
-    print_curses(buffer)
+    print_log(buffer)
     match_ids = smite.get_match_ids(queue_id, date)
-    print_curses(f'DONE! Fetched {len(match_ids)} games.', y=len(
-        buffer)+1, delta=-1)
+    print_log(f'Downloaded {len(match_ids)} games.')
     if requests < len(match_ids) / MAX_BATCH + 11:
-        print_curses('Daily request limit reached. Aborting')
+        print_log('Daily request limit reached. Aborting')
         return False
-    rs = analyzer.analyze_match_list(
-        match_ids, sessions=sessions, screen=screen, log_index=log)
-    log += 1
+    rs = analyzer.analyze_match_list(match_ids, sessions=sessions)
     rs.name = name
     rs.load_to_db(queue_id, date)
 
@@ -144,7 +145,6 @@ def handle_queue(queue_id, date, name=None):
 
 
 def fill():
-    global log
     initialize()
     delta = 1
     name, date = smite.get_latest_motd(delta)
@@ -156,10 +156,7 @@ def fill():
 
     update_all()
 
-    print_curses('All done.', delta=1)
-    sleep(2)
-
-    curses.endwin()
+    print_log('Fill done.')
 
 
 if __name__ == '__main__':

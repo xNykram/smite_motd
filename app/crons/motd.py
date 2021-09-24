@@ -9,16 +9,10 @@ MINIMUM_GAMES_REQUIRED = 60
 
 def run_save_motd():
     try:
-        keys = read_auth_config()
         smite = Smite()
         smite.save_motd()
     except Exception as Error:
         return str(Error)
-
-
-def load_motd_names(arr):
-    if db.query('SELECT name FROM motds'):
-        MOTD_NAMES = db.cursor.fetchall()
 
 
 GOD_ID_DB_NAME = 'smite_lore_prefgodsformotd'

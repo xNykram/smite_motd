@@ -10,6 +10,8 @@ from app.crons.motd import update_motd_god_ids
 from db.database import db
 from functools import reduce
 
+# Tests new functionalities
+
 sessions_ids = read_latest_sessions()
 sessions = [Smite(s_id) for s_id in sessions_ids]
 ensure_sessions(sessions, 1)
