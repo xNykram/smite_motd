@@ -1,10 +1,9 @@
-from smiteapi.smiteobjects import Match, PlayerEntry
+from api.smiteobjects import Match, PlayerEntry
 from db.database import db
 from ast import literal_eval
 from functools import reduce
-from smiteapi.smite import Smite, QUEUES_DICT, ensure_sessions
+from api.smite import ensure_sessions
 from threading import Thread
-import curses
 from time import sleep
 
 # max number of returned games from single api call, limited by hi-rez
@@ -167,7 +166,7 @@ class Analyzer(object):
             items_odds[loser_god] = loser_items_odds
         result_set.analyzed_count += 1
 
-    def analyze_match_list(self, match_list, session_count=10, sessions=None, result_set=None, screen=None, log_index=0):
+    def analyze_match_list(self, match_list, session_count=10, sessions=None, result_set=None):
         if result_set is None:
             result_set = ResultSet()
         if sessions is None:
@@ -189,13 +188,7 @@ class Analyzer(object):
         for i in range(session_count):
             Thread(target=pop_matches, args=[sessions[i]]).start()
         while match_list != []:
-            if screen is not None:
-                screen.addstr(
-                    log_index, 0, f'Analyzed {analyzed_count} out of {total} games.')
-                screen.refresh()
             sleep(0.25)
-        screen.addstr(log_index, 0, f'Analyzed {total} out of {total} games.')
-        screen.refresh()
         return result_set
 
     # since smite-api returns PlayerEntries(raw) instead of raw matches
@@ -221,31 +214,18 @@ class Analyzer(object):
             self.analyze(match, result_set)
         return index + 1
 
-    def analyze_queue(self, api, queue_id, date, hour=-1, log=-1, screen=None):
+    def analyze_queue(self, api, queue_id, date, hour=-1):
         """calls for all games from the given queue and analyzes them"""
         response = api.make_request(
             'getmatchidsbyqueue', [queue_id, date, hour])
         ids = list(map(lambda d: d['Match'], response))
         result_set = ResultSet(hour == -1)
-        total = len(ids)
         count = 0
-        queue_name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
         while ids != []:
-            if log >= 0 and screen is not None:
-                buffer = 'Analyzed {}/{} ({}%) {} games.'
-                buffer = buffer.format(count, total, int(
-                    (count/total)*100), queue_name)
-                screen.addstr(log, 0, buffer)
-                screen.refresh()
             id_str = ','.join(ids[:MAX_BATCH])
             batch = api.make_request('getmatchdetailsbatch', [id_str])
             ids = ids[MAX_BATCH:]
             count += self.analyze_batch(batch, result_set)
-        if log >= 0 and screen is not None:
-            buffer = 'Completed {} analysis with {} games!'.format(
-                queue_name, count)
-            screen.addstr(log, 0, buffer)
-            screen.refresh()
         result_set.analyzed_count = count
         self.results[(queue_id, date)] = result_set
         return result_set

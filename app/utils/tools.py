@@ -1,6 +1,7 @@
 from threading import Thread
 from time import sleep
 
+# This one should be removed in the future
 
 def map_with_threads(fun, container, key=lambda x: x, check_delay=0.5):
     """maps all items creating new threads for each operation"""

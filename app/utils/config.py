@@ -1,6 +1,5 @@
 from json import load as json_load
 import os
-from pathlib import Path
 
 
 def read_db_config():
@@ -27,7 +26,7 @@ def read_auth_config():
     return dev_id, auth_id
 
 
-LATEST_SESSION_FILE = 'latest_sessions.txt'
+LATEST_SESSION_FILE = '../latest_sessions.txt'
 
 
 def read_latest_sessions():

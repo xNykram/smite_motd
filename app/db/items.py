@@ -1,11 +1,11 @@
-from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT, ensure_dicts
-from smiteapi.smiteapiscripts import read_auth_config
-from db.database import db
+from api.smite import GODS_DICT, ITEMS_DICT, ensure_dicts
 from functools import reduce
 from analyzer import ResultSet, Analyzer
 
 MIN_AMOUNT_REQUAIRED = 10
 MIN_WINRATE = 0.51
+
+# TODO. Not done yet, create table for this and push into it
 
 
 def update_pref_items(n=5, analyzer=None):

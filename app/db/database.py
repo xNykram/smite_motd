@@ -1,5 +1,5 @@
 from pymssql import connect
-from smiteapi.smiteapiscripts import read_db_config
+from utils.config import read_db_config
 
 
 class Database:

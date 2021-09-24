@@ -1,24 +1,9 @@
-from smiteapi.smite import Smite, GODS_DICT, ensure_dicts
-from smiteapi.smiteapiscripts import read_auth_config
+from api.smite import Smite, GODS_DICT, ensure_dicts
 from db.database import db
 from functools import reduce
 from analyzer import ResultSet, Analyzer
 
 MINIMUM_GAMES_REQUIRED = 60
-
-
-def run_save_motd():
-    try:
-        keys = read_auth_config()
-        smite = Smite()
-        smite.save_motd()
-    except Exception as Error:
-        return str(Error)
-
-
-def load_motd_names(arr):
-    if db.query('SELECT name FROM motds'):
-        MOTD_NAMES = db.cursor.fetchall()
 
 
 GOD_ID_DB_NAME = 'smite_lore_prefgodsformotd'
@@ -59,8 +44,4 @@ def update_motd_god_ids(motd_name, n=5, analyzer=None):
         db.query(query)
 
     return top
-
-
-if __name__ == '__main__':
-    run_save_motd()
 

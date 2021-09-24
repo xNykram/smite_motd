@@ -4,9 +4,9 @@ import json
 from db.database import db
 from urllib.request import urlopen
 import urllib
-from smiteapi.smiteobjects import Player
-from smiteapi.smiteapiscripts import read_auth_config, write_latest_sessions
-from tools import map_with_threads
+from api.smiteobjects import Player
+from utils.config import read_auth_config, write_latest_sessions
+from utils.tools import map_with_threads
 
 
 # May be incorrect
