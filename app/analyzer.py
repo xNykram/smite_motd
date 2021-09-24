@@ -1,8 +1,8 @@
-from smiteapi.smiteobjects import Match, PlayerEntry
+from api.smiteobjects import Match, PlayerEntry
 from db.database import db
 from ast import literal_eval
 from functools import reduce
-from smiteapi.smite import Smite, QUEUES_DICT, ensure_sessions
+from api.smite import ensure_sessions
 from threading import Thread
 from time import sleep
 

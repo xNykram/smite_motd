@@ -1,12 +1,11 @@
 import sys
 import getopt
-from smiteapi.smite import Smite, GODS_DICT, ITEMS_DICT, QUEUES_DICT, validate_sessions, ensure_sessions
-from threading import Thread
+from api.smite import Smite, QUEUES_DICT, validate_sessions, ensure_sessions
 from analyzer import Analyzer, MAX_BATCH
-from smiteapi.smiteapiscripts import read_latest_sessions, write_latest_sessions
+from utils.config import read_latest_sessions
 from time import sleep
 from datetime import datetime, timedelta
-from crons.motd import update_motd_god_ids
+from db.motd import update_motd_god_ids
 
 # Number of top gods inserted to database for each motd
 TOP_COUNT = 10
@@ -28,21 +27,35 @@ def main(argv):
     if opts == []:
         print_usage()
         sys.exit(2)
-    try:
-        for opt, arg in opts:
-            if opt == '-m':
+    for opt, arg in opts:
+        if opt == '-m':
+            try:
                 fill()
-            elif opt == '-a':
+            except Exception as err:
+                print_log('Error occurred while analyzing latest motds.')
+                print_log(err, with_time=False)
+        elif opt == '-a':
+            try:
                 analyze_yeasterday()
-            elif opt == '-u':
+            except Exception as err:
+                print_log(
+                    'Error occurred while analyzing yeasterday queues.')
+                print_log(err, with_time=False)
+        elif opt == '-u':
+            try:
                 update_all()
-            elif opt == '-q':
+            except Exception as err:
+                print_log(
+                    'Error occurred while synchronizing data with database.')
+                print_log(err, with_time=False)
+        elif opt == '-q':
+            try:
                 analyze_update(arg)
-        sys.exit(1)
-    except:
-        sys.exit(0)
-    finally:
-        log_file.close()
+            except Exception as err:
+                print_log(f'Error occurred while analyzing queue {arg}')
+                print_log(err, with_time=False)
+    log_file.close()
+    sys.exit(1)
 
 
 def print_usage():
@@ -90,11 +103,12 @@ def initialize():
 
 
 def update_all():
-    global analyzer
+    global analyzer, smite
     initialize()
+    print_log('Updating motd schedule...')
+    smite.save_motd()
     for motd_name in smite.get_motd_names():
-        buffer = f'Updating winrate of {motd_name}...'
-        print_log(buffer)
+        print_log(f'Updating winrate of {motd_name}...')
         update_motd_god_ids(motd_name, n=TOP_COUNT, analyzer=analyzer)
         print_log(f'{motd_name} updated!')
 
@@ -153,8 +167,6 @@ def fill():
             break
         delta += 1
         name, date = smite.get_latest_motd(delta)
-
-    update_all()
 
     print_log('Fill done.')
 
