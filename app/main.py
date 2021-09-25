@@ -68,6 +68,11 @@ def print_usage():
 
 
 def print_log(msg, with_time=True):
+    """Prints given message to log file
+    
+    Args:
+        with_time(bool): A flag is used to print logs with its date (default: True)
+    """
     global log_file
     if with_time:
         today = datetime.now()
@@ -78,6 +83,7 @@ def print_log(msg, with_time=True):
 
 
 def initialize():
+    """ Initializes sessions and log file """
     global smite, analyzer, initialized, log_file
     if initialized:
         return
@@ -85,7 +91,6 @@ def initialize():
     sys.stderr = log_file
 
     # Read latest sessions
-
     print_log('Loading existing sessions...')
 
     sessions_ids = read_latest_sessions()
@@ -103,6 +108,7 @@ def initialize():
 
 
 def update_all():
+    """ Updates today's motd schedule and pref gods """
     global analyzer, smite
     initialize()
     print_log('Updating motd schedule...')
@@ -114,6 +120,7 @@ def update_all():
 
 
 def analyze_update(queue):
+    """ Analyzes yeasterday's queue and pushes results to database """
     queue = int(queue)
     if queue not in QUEUES_DICT:
         print('Invaild queue id.')
@@ -128,6 +135,7 @@ def analyze_update(queue):
 
 
 def analyze_yeasterday():
+    """ Analyzes all yesterday's queues and pushes results to database """
     initialize()
     yeasterday = datetime.now() - timedelta(days=1)
     date = yeasterday.strftime('%Y%m%d')
@@ -138,6 +146,13 @@ def analyze_yeasterday():
 
 
 def handle_queue(queue_id, date, name=None):
+    """ Analyzes queue and pushes result to database
+        
+        Args:
+            queue_id (int): Id of queue to analyze
+            date (string in format YYYYMMDD): Date of queue to analyze
+            name (string): Optional argument for analyzing motds
+    """
     if name is None:
         name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
     if (queue_id, date) in analyzer.results:
@@ -159,6 +174,7 @@ def handle_queue(queue_id, date, name=None):
 
 
 def fill():
+    """ Analyzes all available motds and pushes results to database """
     initialize()
     delta = 1
     name, date = smite.get_latest_motd(delta)

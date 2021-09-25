@@ -2,8 +2,12 @@ from json import load as json_load
 import os
 
 
-def read_db_config():
-    """read database config that is stored in json"""
+def read_db_config() -> tuple:
+    """ Read database config that is stored in json 
+
+        Returns:
+            Tuple of server_name, login, password, dbname
+    """
     project_dir = os.path.abspath('..')
     config_dir = os.path.join(project_dir, r"dbconfig.json")
     with open(config_dir, 'r') as dbconfig:
@@ -16,7 +20,11 @@ def read_db_config():
 
 
 def read_auth_config():
-    """read auth config that is stored in json"""
+    """ Read auth config that is stored in json
+
+        Returns:
+            Tuple of dev_id, auth_id
+    """
     project_dir = os.path.abspath('..')
     config_dir = os.path.join(project_dir, r"auth.json")
     with open(config_dir, 'r') as authconfig:
@@ -29,7 +37,12 @@ def read_auth_config():
 LATEST_SESSION_FILE = '../latest_sessions.txt'
 
 
-def read_latest_sessions():
+def read_latest_sessions() -> list:
+    """ Read session ids from latest_sessions.txt file 
+
+        Returns:
+            List of readed session ids
+    """
     if not os.path.isfile(LATEST_SESSION_FILE):
         return []
     with open('latest_sessions.txt', 'r') as file:
@@ -37,7 +50,12 @@ def read_latest_sessions():
         return [session.replace('\n', '') for session in result]
 
 
-def write_latest_sessions(sessions):
+def write_latest_sessions(sessions: list):
+    """ Write latest session ids to latest_sessions.txt 
+
+        Args:
+            sessions (list): List of smite objects to save
+    """
     with open(LATEST_SESSION_FILE, 'w') as file:
         for smite_obj in sessions:
             file.write(smite_obj.session)
