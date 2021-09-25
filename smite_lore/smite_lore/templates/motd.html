@@ -57,7 +57,7 @@
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
                     <div class="god">
-                        <div class="god-image"><img alt="God: {{god.godName}}" src={{god.godImageUrl}}></div>
+                        <div class="god-image"><img alt="God image" src={{god.godImageUrl}}></div>
                         <div class="god-name">{{god.godName}}</div>
                         <div class="god-wr">
                             <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
