@@ -6,9 +6,10 @@ from utils.config import read_latest_sessions
 from time import sleep
 from datetime import datetime, timedelta
 from db.motd import update_motd_god_ids
+from db.database import db
 
 # Number of top gods inserted to database for each motd
-TOP_COUNT = 10
+TOP_COUNT = 8
 
 log_file = None
 sessions = []
@@ -68,6 +69,11 @@ def print_usage():
 
 
 def print_log(msg, with_time=True):
+    """Prints given message to log file
+
+    Args:
+        with_time(bool): A flag is used to print logs with its date (default: True)
+    """
     global log_file
     if with_time:
         today = datetime.now()
@@ -78,6 +84,7 @@ def print_log(msg, with_time=True):
 
 
 def initialize():
+    """ Initializes sessions and log file """
     global smite, analyzer, initialized, log_file
     if initialized:
         return
@@ -85,7 +92,6 @@ def initialize():
     sys.stderr = log_file
 
     # Read latest sessions
-
     print_log('Loading existing sessions...')
 
     sessions_ids = read_latest_sessions()
@@ -103,17 +109,37 @@ def initialize():
 
 
 def update_all():
+    """ Updates today's motd schedule and pref gods """
     global analyzer, smite
     initialize()
     print_log('Updating motd schedule...')
-    smite.save_motd()
+    try:
+        smite.save_motd()
+        log_to_database('updateMotd', 'Success')
+    except Exception as err:
+        print_log("Error. Couldn't save tommorow's motd!")
+        print_log(err.args[1], with_time=False)
+        log_to_database('updateMotd', 'Failure', err.args[1])
+    update_motd_pref_gods()
+
+
+def update_motd_pref_gods():
+    global analyzer, smite
     for motd_name in smite.get_motd_names():
-        print_log(f'Updating winrate of {motd_name}...')
-        update_motd_god_ids(motd_name, n=TOP_COUNT, analyzer=analyzer)
-        print_log(f'{motd_name} updated!')
+        try:
+            print_log(f'Updating winrate of {motd_name}...')
+            update_motd_god_ids(motd_name, n=TOP_COUNT, analyzer=analyzer)
+            print_log(f'{motd_name} updated!')
+        except Exception as err:
+            response = f"Error while saving {motd_name}: {err.args[1]}"
+            print_log(response)
+            log_to_database('updateMotdPrefGods', 'Failure', response)
+            break
+    log_to_database('updateMotdPrefGods', 'Success')
 
 
 def analyze_update(queue):
+    """ Analyzes yeasterday's queue and pushes results to database """
     queue = int(queue)
     if queue not in QUEUES_DICT:
         print('Invaild queue id.')
@@ -128,6 +154,7 @@ def analyze_update(queue):
 
 
 def analyze_yeasterday():
+    """ Analyzes all yesterday's queues and pushes results to database """
     initialize()
     yeasterday = datetime.now() - timedelta(days=1)
     date = yeasterday.strftime('%Y%m%d')
@@ -138,6 +165,13 @@ def analyze_yeasterday():
 
 
 def handle_queue(queue_id, date, name=None):
+    """ Analyzes queue and pushes result to database
+
+        Args:
+            queue_id (int): Id of queue to analyze
+            date (string in format YYYYMMDD): Date of queue to analyze
+            name (string): Optional argument for analyzing motds
+    """
     if name is None:
         name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
     if (queue_id, date) in analyzer.results:
@@ -159,6 +193,7 @@ def handle_queue(queue_id, date, name=None):
 
 
 def fill():
+    """ Analyzes all available motds and pushes results to database """
     initialize()
     delta = 1
     name, date = smite.get_latest_motd(delta)
@@ -169,6 +204,14 @@ def fill():
         name, date = smite.get_latest_motd(delta)
 
     print_log('Fill done.')
+
+
+def log_to_database(log_type: str, info: str, response='') -> bool:
+    query = "INSERT INTO logs (type, logInfo, date, response) \
+            VALUES ('{}', '{}', GETDATE(), '{}')"
+
+    if not db.query(query.format(log_type, info, response)):
+        print_log("Error: Couldn't write log to database")
 
 
 if __name__ == '__main__':
