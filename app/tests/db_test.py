@@ -2,7 +2,9 @@ import unittest
 
 
 class DatabaseTest(unittest.TestCase):
-    pass
+
+    def test_connection(self):
+        pass
 
 
 if __name__ == '__main__':
