@@ -52,7 +52,7 @@ class ResultSet(object):
         self.loses = {}  # dict of (god_id, int)
         self.name = 'NULL'  # optional name of motd
 
-    def accumulate(self: ResultSet, other: ResultSet) -> ResultSet:
+    def accumulate(self, other):
         """ Merge two result set into one """
         instance = ResultSet()
         instance.is_completed = self.is_completed and other.is_completed
@@ -293,7 +293,7 @@ class Analyzer(object):
         return reduce(ResultSet.accumulate, rs)
 
     @staticmethod
-    def from_db(api=None, log=False) -> Analyzer:
+    def from_db(api=None, log=False):
         """ Builds analyzer object basing on data from database 
             
             Args:

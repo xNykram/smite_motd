@@ -201,13 +201,8 @@ class Smite(object):
         """
         url = self.create_request(name, params)
         url = url.replace(' ', '%20')  # Cater for spaces in parameters
-        try:
-            html = urlopen(url).read()
-            return json.loads(html.decode('utf-8'))
-        except urllib.error.HTTPError as e:
-            print("Couldn't make request [{}: {}]."
-                  .format(e.code, ERROR_CODE_DICT.get(e.code, 'UNKNOWN CODE')))
-            return []
+        html = urlopen(url).read()
+        return json.loads(html.decode('utf-8'))
 
     def request_left(self) -> int:
         """ Returns number of requests which can be made today """
@@ -216,7 +211,7 @@ class Smite(object):
             total = response[0]['Total_Requests_Today']
             limit = response[0]['Request_Limit_Daily']
             return limit - total
-        except:
+        except Exception:
             return 0
 
     def server_status(self) -> str:

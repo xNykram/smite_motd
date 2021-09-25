@@ -1,6 +1,3 @@
-from smite import Smite
-
-
 class Match(object):
     """ A class which stores info about smite match """
 
@@ -32,7 +29,7 @@ class Player(object):
         self.id = data['Id']
         self.team_id = data['TeamId']
 
-    def latest_match_id(self, api: Smite) -> str:
+    def latest_match_id(self, api) -> str:
         """ Gets id of latest played match
 
             Args:

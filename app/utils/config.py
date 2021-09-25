@@ -45,7 +45,7 @@ def read_latest_sessions() -> list:
     """
     if not os.path.isfile(LATEST_SESSION_FILE):
         return []
-    with open('latest_sessions.txt', 'r') as file:
+    with open(LATEST_SESSION_FILE, 'r') as file:
         result = file.readlines()
         return [session.replace('\n', '') for session in result]
 
