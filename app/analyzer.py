@@ -1,31 +1,37 @@
-from smiteapi.smiteobjects import Match, PlayerEntry
+from api.smiteobjects import Match, PlayerEntry
 from db.database import db
 from ast import literal_eval
 from functools import reduce
-from smiteapi.smite import Smite, QUEUES_DICT, ensure_sessions
+from api.smite import ensure_sessions
 from threading import Thread
-import curses
 from time import sleep
+import sys
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
 
 
-def date_api_to_sql(date):
-    """reformat dates as YYYYMMDD -> YYYY-MM-DD"""
+def date_api_to_sql(date: str) -> str:
+    """ Reformat dates as YYYYMMDD -> YYYY-MM-DD """
     if len(date) < 8:
         return ''
     return date[:4] + '-' + date[4:6] + '-' + date[6:8]
 
 
-def str_to_dict(dict_str):
-    """makes dictionary from string"""
+def str_to_dict(dict_str: str) -> dict:
+    """ Makes dictionary from string 
+
+        Args:
+            dict_str (str): Dictionary represented as string
+             (f.e "{1: 5, 3: 6}")
+    """
     if dict_str is None or dict_str == '' or dict_str == 'NULL':
         return {}
     return literal_eval(dict_str)
 
 
-def accumulate_dict(first, second):
+def accumulate_dict(first: dict, second: dict) -> dict:
+    """ Merge two dictionaries """
     result = first.copy()
     for k in second:
         result[k] = first.get(k, 0) + second.get(k, 0)
@@ -48,7 +54,7 @@ class ResultSet(object):
         self.name = 'NULL'  # optional name of motd
 
     def accumulate(self, other):
-        """TODO: sum up two result sets"""
+        """ Merge two result set into one """
         instance = ResultSet()
         instance.is_completed = self.is_completed and other.is_completed
         instance.gods = accumulate_dict(self.gods, other.gods)
@@ -70,8 +76,8 @@ class ResultSet(object):
         instance.loses = accumulate_dict(self.loses, other.loses)
         return instance
 
-    def serialize(self):
-        """return series of string and ints which representates this object"""
+    def serialize(self) -> str:
+        """ Returns series of string and ints which representates this object """
         gods_str = None
         items_str = None
         items_odds_str = None
@@ -96,8 +102,12 @@ class ResultSet(object):
 
         return (completed, gods_str, items_str, items_odds_str, odds_str, wins_str, loses_str)
 
-    def load_to_db(self, queue_id, api_date, log=False):
-        """inserts result set into database along with queue_id and date"""
+    def load_to_db(self, queue_id: int, api_date: str, log=False):
+        """ Inserts result set into database along with queue_id and date
+
+            Args:
+                log (bool): A flag to log results (error or success). Default: False
+        """
         query = """INSERT INTO analyzer (name, queue_id, date, is_completed, gods, items, items_odds, odds, wins, loses, analyzed_count) VALUES ('{}', {}, '{}', {}, '{}', '{}', '{}', '{}', '{}', '{}', {})"""
         data = self.serialize()
         date = date_api_to_sql(api_date)
@@ -108,15 +118,20 @@ class ResultSet(object):
 
 
 class Analyzer(object):
-    """analyzes smite data"""
+    """ A class responsible for analyzing smite data """
 
     def __init__(self, match_ids=[]):
         self.results = {}  # dict of {(int, date), ResultSet}
         self.match_list = []
         self.analyzed_count = 0
 
-    def analyze(self, match, result_set):
-        """analyzes single match object"""
+    def analyze(self, match: Match, result_set: ResultSet):
+        """ Analyzes single match object
+
+            Args:
+                match (Match): Match to analyze
+                result_set (ResultSet): Object for storing result
+        """
         winners = [
             player for player in match.entries if player.win_status == 'Winner']
         losers = [
@@ -167,12 +182,25 @@ class Analyzer(object):
             items_odds[loser_god] = loser_items_odds
         result_set.analyzed_count += 1
 
-    def analyze_match_list(self, match_list, session_count=10, sessions=None, result_set=None, screen=None, log_index=0):
+    def analyze_match_list(self, match_list: list, session_count=10, sessions=None, result_set=None) -> ResultSet:
+        """ Runs analyzer for every match from match_list 
+
+            Args:
+                match_list (list): List of match to analyze
+                session_count (int): A number of session to use to speed-up analysis.
+                                    Should be a number between 1 to 50 due to api limitations
+                sessions (list): (Optional) list of opened sessions
+                                    Used for saving some api requests
+                result_set (ResultSet): (Optional) object to store results
+                                    If not specified, then the new one is created
+
+            Returns:
+                A ResultSet object containing results of analysis of all matches
+        """
         if result_set is None:
             result_set = ResultSet()
         if sessions is None:
             sessions = []
-        total = len(match_list)
         ensure_sessions(sessions, session_count)
         analyzed_count = 0
 
@@ -189,19 +217,21 @@ class Analyzer(object):
         for i in range(session_count):
             Thread(target=pop_matches, args=[sessions[i]]).start()
         while match_list != []:
-            if screen is not None:
-                screen.addstr(
-                    log_index, 0, f'Analyzed {analyzed_count} out of {total} games.')
-                screen.refresh()
             sleep(0.25)
-        screen.addstr(log_index, 0, f'Analyzed {total} out of {total} games.')
-        screen.refresh()
         return result_set
 
     # since smite-api returns PlayerEntries(raw) instead of raw matches
     # we have to handle it separately
-    def analyze_batch(self, batch, result_set):
-        """analyzes set of raw PlayerEntries"""
+    def analyze_batch(self, batch: list, result_set: ResultSet) -> int:
+        """ Analyzes set of raw PlayerEntries 
+
+            Args:
+                batch (list): List of raw player entries to analyze
+                result_set (ResultSet): Object to save analysis results
+
+            Returns:
+                Number of matches analyzed
+        """
         to_analyze = [Match()]
         index = 0
         for match in batch:
@@ -221,51 +251,68 @@ class Analyzer(object):
             self.analyze(match, result_set)
         return index + 1
 
-    def analyze_queue(self, api, queue_id, date, hour=-1, log=-1, screen=None):
-        """calls for all games from the given queue and analyzes them"""
+    def analyze_queue(self, api, queue_id, date, hour=-1):
+        """ Calls for all games from the given queue and analyzes them
+            
+            Args:
+                api (Smite): Api object to use for downloading data
+                queue_id (int): Id of queue to analyze
+                date (string formated as YYYYMMDD): Date to analyze
+                hour (int): A hour to analyze (0-23) or -1 in case of whole day
+                            (Default: -1)
+
+            Returns:
+                ResultSet object containing all results of analysis
+        """
         response = api.make_request(
             'getmatchidsbyqueue', [queue_id, date, hour])
         ids = list(map(lambda d: d['Match'], response))
         result_set = ResultSet(hour == -1)
-        total = len(ids)
         count = 0
-        queue_name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
         while ids != []:
-            if log >= 0 and screen is not None:
-                buffer = 'Analyzed {}/{} ({}%) {} games.'
-                buffer = buffer.format(count, total, int(
-                    (count/total)*100), queue_name)
-                screen.addstr(log, 0, buffer)
-                screen.refresh()
             id_str = ','.join(ids[:MAX_BATCH])
             batch = api.make_request('getmatchdetailsbatch', [id_str])
             ids = ids[MAX_BATCH:]
             count += self.analyze_batch(batch, result_set)
-        if log >= 0 and screen is not None:
-            buffer = 'Completed {} analysis with {} games!'.format(
-                queue_name, count)
-            screen.addstr(log, 0, buffer)
-            screen.refresh()
         result_set.analyzed_count = count
         self.results[(queue_id, date)] = result_set
         return result_set
 
     def load_to_db(self):
-        """loads analyzer results to database"""
+        """ Loads analyzer results to database """
         for item in self.results.items():
             (queue_id, date) = item[0]
             item[1].load_to_db(queue_id, date)
 
-    def accumulated_result(self):
+    def accumulated_result(self) -> ResultSet:
+        """ Merge all ResultSet into one
+            
+            Returns:
+                A ResultSet object containing accumulated results
+        """
         rs = list(self.results.values())
         return reduce(ResultSet.accumulate, rs)
 
     @staticmethod
-    def from_db(api=None, log=False):
-        """builds analyzer object basing on data from database"""
+    def from_db(api=None):
+        """ Builds analyzer object basing on data from database 
+            
+            Args:
+                api (Smite): (Optional) Api used to build Analyzer
+                log (bool): A flag used to log all info while downloading data from database
+
+            Returns:
+                A new Analyzer object containg all results from database
+
+        """
         query = 'SELECT queue_id, CONVERT(varchar, date, 112), is_completed, gods, items, odds, wins, loses, name, analyzed_count, items_odds FROM analyzer'
         instance = Analyzer(api)
-        if not db.query(query, log):
+
+        try:
+            db.query(query)
+        except Exception as err:
+            print("Error: Couldn't load Analyzer from database", file=sys.stderr)
+            print(str(err.with_traceback), file=sys.stderr)
             return None
 
         response = db.cursor.fetchall()

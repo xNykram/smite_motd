@@ -52,12 +52,12 @@
                 <div class="motddate">{{motd.date}}</div>
             </div>
             <div class="gods-pref">
-                <div class="gods-pref-title">Best Gods for this motd:</div>
+<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
                 <div class="gods-bar">
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
                     <div class="god">
-                        <div class="god-image"><img alt="God: {{god.godName}}" src={{god.godImageUrl}}></div>
+                        <div class="god-image"><img alt="God image" src={{god.godImageUrl}}></div>
                         <div class="god-name">{{god.godName}}</div>
                         <div class="god-wr">
                             <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
@@ -72,7 +72,7 @@
             {% endfor %}
         </div>
         <div class="main-sections main-con-next">
-            <h4>FUTURE MOTD'S</h4>
+            <h4>FUTURE MOTD</h4>
             {% for motd in future_motd %}
             <div class="motdcell">
                 <div class="motdname">{{motd.name|safe}}</div>
@@ -80,7 +80,7 @@
                 <div class="motddate">{{motd.date}}</div>
             </div>
             <div class="gods-pref">
-                <div class="gods-pref-title">Best Gods for this motd:</div>
+<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
                 <div class="gods-bar">
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
@@ -108,7 +108,7 @@
                 <div class="motddate">{{motd.date}}</div>
             </div>
             <div class="gods-pref">
-                <div class="gods-pref-title">Best Gods for this motd:</div>
+<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
                 <div class="gods-bar">
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
@@ -124,10 +124,11 @@
                 </div>
             </div>
             {% endfor %}
-            <div class="footer">
-                <i>&#169; 2021 Smitelore. All rights reserved.</i>
-            </div>
         </div>
+        <div class="footer">
+                <i>&#169; 2021 Smitelore. All rights reserved.</i>
+        </div>
+    </div>
 </body>
 
 </html>
