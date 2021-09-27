@@ -7,21 +7,26 @@ from time import sleep
 from datetime import datetime, timedelta
 from db.motd import update_motd_god_ids
 from db.database import db
+from utils.images import save_god_images
 
 # Number of top gods inserted to database for each motd
 TOP_COUNT = 8
+
+# Path to directory where will be stored gods images
+PATH_TO_GODS_IMAGES = '../smite_lore/smite_lore/static/gods/'
 
 log_file = None
 sessions = []
 smite = None
 analyzer = None
 initialized = False
+debug = False
 
 
 def main(argv):
-    global log_file
+    global log_file, debug
     try:
-        opts, args = getopt.getopt(argv, 'mauq:')
+        opts, args = getopt.getopt(argv, 'mauq:id')
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
@@ -55,17 +60,36 @@ def main(argv):
             except Exception as err:
                 print_log(f'Error occurred while analyzing queue {arg}')
                 print_log(err, with_time=False)
+        elif opt == '-i':
+            try:
+                initialize()
+                count = save_god_images(PATH_TO_GODS_IMAGES, file=log_file)
+                print_log(f'Gods images update was successfully done ({count} downloaded).')
+                if count > 0:
+                    response = f'Downloaded {count} images'
+                else:
+                    response = ''
+                log_to_database('updateGodsImages', 'Success', response)
+            except Exception as err:
+                print_log('Error occurred while saving god images')
+                print_log(err, with_time=False)
+                log_to_database('updateGodsImages', 'Failure', str(err.with_traceback()))
+        elif opt == '-d':
+            debug = True
+            print_log('Debug mode: ON')
     log_file.close()
     sys.exit(1)
 
 
 def print_usage():
     print('Use ./main.py <task>')
-    print('task list:')
+    print('options')
     print('-m  -- motd, analyzes and updates latest motds')
     print('-u  -- update, updates top gods')
     print('-a  -- all, analyzes all queues on yeasterday, not working yet')
     print('-q [id] -- analyzes queue with given id only')
+    print('-d  -- debug, turns on debug mode')
+    print(f"-i  -- images, updates gods images in directory '{PATH_TO_GODS_IMAGES}')") 
 
 
 def print_log(msg, with_time=True):
@@ -85,11 +109,14 @@ def print_log(msg, with_time=True):
 
 def initialize():
     """ Initializes sessions and log file """
-    global smite, analyzer, initialized, log_file
+    global smite, analyzer, initialized, log_file, debug
     if initialized:
         return
-    log_file = open('../log.txt', mode='a')
-    sys.stderr = log_file
+    if debug:
+        log_file = sys.stdout
+    else:
+        log_file = open('../log.txt', mode='a')
+        sys.stderr = log_file
 
     # Read latest sessions
     print_log('Loading existing sessions...')
@@ -210,8 +237,13 @@ def log_to_database(log_type: str, info: str, response='') -> bool:
     query = "INSERT INTO logs (type, logInfo, date, response) \
             VALUES ('{}', '{}', GETDATE(), '{}')"
 
-    if not db.query(query.format(log_type, info, response)):
-        print_log("Error: Couldn't write log to database")
+    final_query = query.format(log_type, info, response)
+
+    try:
+        db.query(final_query)
+    except Exception as err:
+        print_log(f"Error: Couldn't execute query. {err}")
+        print_log(final_query, False)
 
 
 if __name__ == '__main__':

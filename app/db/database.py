@@ -23,27 +23,13 @@ class Database:
         except Exception as Error:
             return False
 
-    def query(self, query, log=False) -> bool:
+    def query(self, query):
         """ Send a request to the database 
 
             Args:
                 query (str): A query to execute
-                log (bool): A flag used for log success/error info 
-                            (Default: False)
-
-            Returns:
-                True if query was executed successfully
-                False otherwise
         """
-        try:
-            self.cursor.execute(query)
-            if log:
-                print('Success')
-            return True
-        except Exception as err:
-            if log:
-                print(str(err))
-            return False
+        self.cursor.execute(query)
 
 
 db = Database()

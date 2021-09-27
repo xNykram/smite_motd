@@ -5,6 +5,7 @@ from functools import reduce
 from api.smite import ensure_sessions
 from threading import Thread
 from time import sleep
+import sys
 
 # max number of returned games from single api call, limited by hi-rez
 MAX_BATCH = 22
@@ -293,7 +294,7 @@ class Analyzer(object):
         return reduce(ResultSet.accumulate, rs)
 
     @staticmethod
-    def from_db(api=None, log=False):
+    def from_db(api=None):
         """ Builds analyzer object basing on data from database 
             
             Args:
@@ -306,7 +307,12 @@ class Analyzer(object):
         """
         query = 'SELECT queue_id, CONVERT(varchar, date, 112), is_completed, gods, items, odds, wins, loses, name, analyzed_count, items_odds FROM analyzer'
         instance = Analyzer(api)
-        if not db.query(query, log):
+
+        try:
+            db.query(query)
+        except Exception as err:
+            print("Error: Couldn't load Analyzer from database", file=sys.stderr)
+            print(str(err.with_traceback), file=sys.stderr)
             return None
 
         response = db.cursor.fetchall()
