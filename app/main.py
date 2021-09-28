@@ -1,5 +1,6 @@
 import sys
 import getopt
+from socket import gethostname
 from api.smite import Smite, QUEUES_DICT, validate_sessions, ensure_sessions
 from analyzer import Analyzer, MAX_BATCH
 from utils.config import read_latest_sessions
@@ -8,6 +9,7 @@ from datetime import datetime, timedelta
 from db.motd import update_motd_god_ids
 from db.database import db
 from utils.images import save_god_images
+from db.tierlist import update_tier_list
 
 # Number of top gods inserted to database for each motd
 TOP_COUNT = 8
@@ -26,7 +28,7 @@ debug = False
 def main(argv):
     global log_file, debug
     try:
-        opts, args = getopt.getopt(argv, 'mauq:id')
+        opts, args = getopt.getopt(argv, 'mauq:idf')
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
@@ -60,6 +62,12 @@ def main(argv):
             except Exception as err:
                 print_log(f'Error occurred while analyzing queue {arg}')
                 print_log(err, with_time=False)
+        elif opt == '-f':
+            try:
+                fill()
+            except Exception as err:
+                print_log('Error occurred while filling database')
+                print_log(err, with_time=False)
         elif opt == '-i':
             try:
                 initialize()
@@ -86,6 +94,7 @@ def print_usage():
     print('options')
     print('-m  -- motd, analyzes and updates latest motds')
     print('-u  -- update, updates top gods')
+    print('-f  -- fill, fill database with latest motds')
     print('-a  -- all, analyzes all queues on yeasterday, not working yet')
     print('-q [id] -- analyzes queue with given id only')
     print('-d  -- debug, turns on debug mode')
@@ -148,6 +157,17 @@ def update_all():
         print_log(err.args[1], with_time=False)
         log_to_database('updateMotd', 'Failure', err.args[1])
     update_motd_pref_gods()
+    try:
+        for queue_id in QUEUES_DICT:
+            name = QUEUES_DICT[queue_id]
+            print_log(f'Updating tierlist of {name}...')
+            update_tier_list(queue_id, analyzer)
+        print_log('Tierlist update done!')
+        log_to_database('updateTierList', 'Success')
+    except Exception as err:
+        print_log("Error. Couldn't update tierlist")
+        print_log(str(err), with_time=False)
+        log_to_database('updateTierList', 'Failure', str(err))
 
 
 def update_motd_pref_gods():
@@ -158,7 +178,7 @@ def update_motd_pref_gods():
             update_motd_god_ids(motd_name, n=TOP_COUNT, analyzer=analyzer)
             print_log(f'{motd_name} updated!')
         except Exception as err:
-            response = f"Error while saving {motd_name}: {err.args[1]}"
+            response = f"Error while saving {motd_name}: {str(err)}"
             print_log(response)
             log_to_database('updateMotdPrefGods', 'Failure', response)
             break
@@ -234,10 +254,18 @@ def fill():
 
 
 def log_to_database(log_type: str, info: str, response='') -> bool:
-    query = "INSERT INTO logs (type, logInfo, date, response) \
-            VALUES ('{}', '{}', GETDATE(), '{}')"
-
-    final_query = query.format(log_type, info, response)
+    host = gethostname()
+    if response == '' or response is None:
+        query = "INSERT INTO logs (type, logInfo, date, response, host) \
+                VALUES ('{}', '{}', GETDATE(), NULL, '{}')"
+        info = info.replace("'", "''")
+        final_query = query.format(log_type, info, host)
+    else:
+        query = "INSERT INTO logs (type, logInfo, date, response, host) \
+                VALUES ('{}', '{}', GETDATE(), '{}', '{}')"
+        info = info.replace("'", "''")
+        response = response.replace("'", "''")
+        final_query = query.format(log_type, info, response, host)
 
     try:
         db.query(final_query)

@@ -296,7 +296,7 @@ class Smite(object):
 
         return result
 
-    def get_latest_motd(self, days_delta=0) -> str:
+    def get_latest_motd(self, days_delta=0, description=False) -> str:
         """ Calls api for latest motd name 
 
             Args:
@@ -304,6 +304,8 @@ class Smite(object):
                                  (0 = today, 1 = yeasterday etc...)
                                  It should be small due to api limitations (max 23)
                                  (Default: 0)
+                description (bool): A flag to also return description 
+                                 (Default: False) 
             Returns:
                 Title of desired motd as string
         """
@@ -316,8 +318,14 @@ class Smite(object):
         index = diff.days + 1 + days_delta
         date_api = (date_obj - timedelta(days=index)).strftime('%Y%m%d')
         if index < 0 or index >= len(self.motds):
-            return ('', '')
-        return (self.motds[index]['title'], date_api)
+            if description:
+                return ('', '', '')
+            else:
+                return ('', '')
+        if description:
+            return (self.motds[index]['title'], self.motds[index]['description'], date_api)
+        else:
+            return (self.motds[index]['title'], date_api)
 
     def get_motd_names(self) -> set:
         """ Calls api for all latest motd names
@@ -341,6 +349,10 @@ class Smite(object):
                 sql_command = "INSERT INTO smite_lore_motd (name, description, date) VALUES ('{}', '{}', '{}')"\
                     .format(row['name'], row['description'], row['startDateTime'])
                 db.query(sql_command)
+        # remove duplicates
+        duplicates_query = """DELETE FROM smite_lore_motd 
+WHERE id NOT IN (SELECT MAX(id) AS MAXID FROM smite_lore_motd GROUP BY date)"""
+        db.query(duplicates_query)
 
     @staticmethod
     def get_current_date():
