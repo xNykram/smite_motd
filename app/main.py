@@ -1,5 +1,6 @@
 import sys
 import getopt
+from socket import gethostname
 from api.smite import Smite, QUEUES_DICT, validate_sessions, ensure_sessions
 from analyzer import Analyzer, MAX_BATCH
 from utils.config import read_latest_sessions
@@ -253,12 +254,18 @@ def fill():
 
 
 def log_to_database(log_type: str, info: str, response='') -> bool:
-    query = "INSERT INTO logs (type, logInfo, date, response) \
-            VALUES ('{}', '{}', GETDATE(), '{}')"
-
-    info = info.replace("'", "''")
-    response = response.replace("'", "''")
-    final_query = query.format(log_type, info, response)
+    host = gethostname()
+    if response == '' or response is None:
+        query = "INSERT INTO logs (type, logInfo, date, response, host) \
+                VALUES ('{}', '{}', GETDATE(), NULL, '{}')"
+        info = info.replace("'", "''")
+        final_query = query.format(log_type, info, host)
+    else:
+        query = "INSERT INTO logs (type, logInfo, date, response, host) \
+                VALUES ('{}', '{}', GETDATE(), '{}', '{}')"
+        info = info.replace("'", "''")
+        response = response.replace("'", "''")
+        final_query = query.format(log_type, info, response, host)
 
     try:
         db.query(final_query)
