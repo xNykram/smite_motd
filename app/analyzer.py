@@ -30,11 +30,11 @@ def str_to_dict(dict_str: str) -> dict:
     return literal_eval(dict_str)
 
 
-def accumulate_dict(first: dict, second: dict) -> dict:
+def accumulate_dict(first: dict, second: dict, func=lambda a, b: a + b) -> dict:
     """ Merge two dictionaries """
     result = first.copy()
     for k in second:
-        result[k] = first.get(k, 0) + second.get(k, 0)
+        result[k] = func(first.get(k, 0), second.get(k, 0))
     return result
 
 
@@ -114,7 +114,7 @@ class ResultSet(object):
         query = query.format(self.name, queue_id, date,
                              data[0], data[1], data[2], data[3], data[4], data[5], data[6], self.analyzed_count)
 
-        return db.query(query, log)
+        db.query(query)
 
 
 class Analyzer(object):
@@ -174,7 +174,6 @@ class Analyzer(object):
         for loser in losers:
             loser_god = loser.god_id
             loses[loser_god] = loses.get(loser_god, 0) + 1
-            wins[loser_god] = wins.get(loser_god, 0) + 1
             loser_items_odds = items_odds.get(loser_god, {})
             for item, count in winners_items.items():
                 w, l = loser_items_odds.get(item, (0, 0))
@@ -312,7 +311,7 @@ class Analyzer(object):
             db.query(query)
         except Exception as err:
             print("Error: Couldn't load Analyzer from database", file=sys.stderr)
-            print(str(err.with_traceback), file=sys.stderr)
+            print(str(err.with_traceback()), file=sys.stderr)
             return None
 
         response = db.cursor.fetchall()
