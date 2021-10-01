@@ -46,7 +46,7 @@ def update_tier_list(queue_id, analyzer=None):
     loses = {GODS_DICT.get(god_id, ("", ""))[
         0]: rs.loses[god_id] for god_id in rs.loses}
 
-    db.query(f"DELETE FROM tierlist WHERE mode = '{mode}'")
+    db.query(f"DELETE FROM smite_lore_tierlist WHERE mode = '{mode}'")
     top = []
     for god in wins | loses:
         w = wins.get(god, 0)
@@ -56,7 +56,7 @@ def update_tier_list(queue_id, analyzer=None):
         tier = get_tier(ratio)
         god = god.replace("'", "''")  # fix special chars
         top.append((god, w, l, ratio, tier))
-        query = "INSERT INTO tierlist VALUES ('{}', '{}', '{}', {}, GETDATE())"
+        query = "INSERT INTO smite_lore_tierlist VALUES ('{}', '{}', '{}', {}, GETDATE())"
         query = query.format(god, mode, tier, ratio)
         db.query(query)
 
