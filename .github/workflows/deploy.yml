@@ -16,7 +16,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www/git/SmiteAPI-Dev
+          cd /SmiteAPI-Dev
           sudo git pull
           sudo systemctl daemon-reload
           sudo systemctl restart gunicorn
