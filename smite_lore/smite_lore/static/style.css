@@ -181,8 +181,11 @@ header{
     color: white;
 }
 
-.main-con .main-title{
+h1{
     font-size: 50px;
+}
+
+.main-con .main-title{
     font-family: 'Racing Sans One';
     letter-spacing: 10px;
     padding-bottom: 45px;
