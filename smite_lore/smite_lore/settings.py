@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'smite_lore'
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-MEDIA_URL = '/media/'
+MEDIA_URL = '/static/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
