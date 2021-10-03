@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="smite, smite motd, motd, smitelore, smite lore, match of the day, smite pref gods">
+    <meta name="description" content="match of the day">
+    <title>Smite - Tier list</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static '/smite_logo_small.png' %}">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025793484206722"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-logo">
+                <img alt="logo" src="{% static '/smite_logo.png' %}">
+            </div>
+            <div class="nav-right-panel">
+                <div class="nav-panel-items">
+                    <a href="/">Motd</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="tierlist">Tier list</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="stats">Stats</a>
+                </div>
+                <div class="nav-panel-items">
+                    <a href="contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="main-con">
+       <div class="main-con-title">
+            <h4>Smite Conquest Ranked Tier list</h4>
+        </div>
+        <div class="tierlist-box">
+            <div class="tierlist-section tierlist-section-ss">
+                <div class="rank-box">SS</div>
+                <div class="gods">
+                    {% for god in tierlistgods %}
+                    {% if god.rank == "SS" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-spos">
+                <div class="rank-box">S+</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "S+" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-s">
+                <div class="rank-box">S</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "S" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-sneg">
+                <div class="rank-box">S-</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "S-" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-apos">
+                <div class="rank-box">A+</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "A+" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-a">
+                <div class="rank-box">A</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "a" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-aneg">
+                <div class="rank-box">A-</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "A-" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-b">
+                <div class="rank-box">B</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "B" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-c">
+                <div class="rank-box">C</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "C" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tierlist-section tierlist-section-d">
+                <div class="rank-box">D</div>
+                <div class="gods">
+                   {% for god in tierlistgods %}
+                    {% if god.rank == "D" %}
+                    <div class="god">
+                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+         <div class="footer">
+                <i>&#169; 2021 Smitelore. All rights reserved.</i>
+        </div>
+    </div>
+</body>
+
+</html>

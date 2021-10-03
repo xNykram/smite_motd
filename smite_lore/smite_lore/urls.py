@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib import admin
 from . import views
 from django.contrib.sitemaps.views import sitemap
 from .sitemaps import StaticViewSitemap
@@ -15,6 +16,7 @@ urlpatterns = [
     path('stats', views.stats, name="stats"),
     path('tierlist', views.tierlist, name="tierlist"),
     path('contact', views.contact, name="contact"),
+    path('adminpanel', admin.site.urls, name="admin"),
     path('sitemap', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')
 ]

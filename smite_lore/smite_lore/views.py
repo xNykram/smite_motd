@@ -17,6 +17,7 @@ def tierlist(request):
     return render(request, 'tierlist.html', {'tierlistgods': tierlist})
 
 
+
 def contact(request):
     return render(request, 'contact.html')
 
