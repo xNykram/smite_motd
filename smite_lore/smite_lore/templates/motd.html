@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="{% static '/style.css' %}">
     <meta charset="UTF-8">
     <meta name="keywords" content="smite, smite motd, motd, smitelore, smite lore, match of the day, smite pref gods">
-    <meta name="description" content="match of the day">
+    <meta name="description" content="Match of the day for Smite game and also more information about archiv/future motds">
+    <meta http-equiv='content-language' content='en-gb'>
     <title>Smite - Motd</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{% static '/smite_logo_small.png' %}">
@@ -19,7 +20,7 @@
     <header>
         <div class="navbar">
             <div class="nav-logo">
-                <img alt="logo" src="{% static '/smite_logo.png' %}">
+                <img src="{% static '/smite_logo.png' %}" alt="Smitelore main logo">
             </div>
             <div class="nav-right-panel">
                 <div class="nav-panel-items">
@@ -39,7 +40,7 @@
     </header>
     <div class="main-con">
         <div class="main-title">
-            SMITE MOTD
+            <h1> SMITE MOTD</h1>
         </div>
         <div class="main-sections main-con-today">
             <div class="main-con-title">
@@ -57,7 +58,7 @@
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
                     <div class="god">
-                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                        <div class="god-image"><img alt="Smitelore god image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
                         <div class="god-name">{{god.godName}}</div>
                         <div class="god-wr">
                             <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
@@ -85,7 +86,7 @@
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
                     <div class="god">
-                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                        <div class="god-image"><img alt="Smitelore god image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
                         <div class="god-name">{{god.godName}}</div>
                         <div class="god-wr">
                             <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
@@ -113,7 +114,7 @@
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
                     <div class="god">
-                        <div class="god-image"><img alt="God image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                        <div class="god-image"><img alt="Smitelore god image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
                         <div class="god-name">{{god.godName}}</div>
                         <div class="god-wr">
                             <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
