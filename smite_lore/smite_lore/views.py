@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .common import calcMotdList
-
+from .models import Tierlist
 
 def match_list(request):
     data = calcMotdList()
@@ -11,10 +11,27 @@ def stats(request):
     return render(request, 'stats.html')
 
 
-def analyzer(request):
-    return render(request, 'analyzer.html')
+def tierlist(request):
+    tierlist = Tierlist.objects.all().filter(mode='Conquest(R)')
+    print(tierlist)
+    return render(request, 'tierlist.html', {'tierlistgods': tierlist})
 
 
 def contact(request):
     return render(request, 'contact.html')
 
+
+def handler404(request, exception):
+    return render(request, "404.html", {})
+
+
+def handler500(request):
+    return render(request, "500.html", {})
+
+
+def handler403(request, exception):
+    return render(request, "403.html", {})
+
+
+def handler400(request, exception):
+    return render(request, "400.html", {})
