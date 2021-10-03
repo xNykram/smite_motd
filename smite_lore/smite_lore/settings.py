@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2&_49v#j%8288fm-y(9fogao*lz)c7#=q-=y_2^xdcs21iaxs('
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['51.68.140.249', 'https://nykram.pl', 'localhost', '127.0.0.1', 'nykram.pl', 'https://smitelore.com', 'smitelore.com']
 
@@ -24,6 +24,8 @@ INSTALLED_APPS = [
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "smite_lore//static")
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
