@@ -1,18 +1,25 @@
 from analyzer import Analyzer, ResultSet
 from functools import reduce
 from api.smite import GODS_DICT, ITEMS_DICT, QUEUES_DICT, ensure_dicts
-from utils.config import read_tiers_file
 from db.database import db
 import json
 
 TIERS_DICT = {}
+TIERS_QUERY = """SELECT * FROM tiers"""
+
+
+def fetch_tiers_from_db():
+    """ Fetches tiers dictionary from database """
+    global TIERS_DICT
+    if TIERS_DICT != {}:
+        return
+    db.query(TIERS_QUERY)
+    TIERS_DICT = dict(db.cursor.fetchall())
 
 
 def get_tier(ratio: float) -> str:
     """ Get's tier of given ratio """
     global TIERS_DICT
-    if TIERS_DICT == {}:
-        TIERS_DICT = read_tiers_file()
     max_tier = ''
     max_value = -1
     for tier, value in TIERS_DICT.items():
@@ -30,7 +37,7 @@ def update_tier_list(queue_id, analyzer=None):
             queue_id (int): Id of queue to create tierlist
             analyzer (Analyzer): Analyzer object to use
     """
-    
+
     if analyzer is None:
         analyzer = Analyzer.from_db()
     ensure_dicts()
@@ -39,7 +46,7 @@ def update_tier_list(queue_id, analyzer=None):
                for entry in analyzer.results.items() if entry[0][0] == queue_id]
     rs = reduce(ResultSet.accumulate, results, ResultSet())
     if rs is None:
-        return
+        return None
 
     wins = {GODS_DICT.get(god_id, ("", ""))[
         0]: rs.wins[god_id] for god_id in rs.wins}
@@ -47,6 +54,7 @@ def update_tier_list(queue_id, analyzer=None):
         0]: rs.loses[god_id] for god_id in rs.loses}
 
     db.query(f"DELETE FROM smite_lore_tierlist WHERE mode = '{mode}'")
+    fetch_tiers_from_db()
     top = []
     for god in wins | loses:
         w = wins.get(god, 0)

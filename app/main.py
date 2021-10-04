@@ -1,11 +1,11 @@
 import sys
 import getopt
 from socket import gethostname
+from datetime import datetime, timedelta
 from api.smite import Smite, QUEUES_DICT, validate_sessions, ensure_sessions
 from analyzer import Analyzer, MAX_BATCH
 from utils.config import read_latest_sessions
 from time import sleep
-from datetime import datetime, timedelta
 from db.motd import update_motd_god_ids
 from db.database import db
 from utils.images import save_god_images
@@ -49,6 +49,7 @@ def main(argv):
                 print_log(
                     'Error occurred while analyzing yeasterday queues.')
                 print_log(err, with_time=False)
+                log_to_database('analyzer', 'Failure', str(err))
         elif opt == '-u':
             try:
                 update_all()
@@ -72,7 +73,8 @@ def main(argv):
             try:
                 initialize()
                 count = save_god_images(PATH_TO_GODS_IMAGES, file=log_file)
-                print_log(f'Gods images update was successfully done ({count} downloaded).')
+                print_log(
+                    f'Gods images update was successfully done ({count} downloaded).')
                 if count > 0:
                     response = f'Downloaded {count} images'
                 else:
@@ -81,7 +83,8 @@ def main(argv):
             except Exception as err:
                 print_log('Error occurred while saving god images')
                 print_log(err, with_time=False)
-                log_to_database('updateGodsImages', 'Failure', str(err.with_traceback()))
+                log_to_database('updateGodsImages', 'Failure',
+                                str(err))
         elif opt == '-d':
             debug = True
             print_log('Debug mode: ON')
@@ -98,7 +101,8 @@ def print_usage():
     print('-a  -- all, analyzes all queues on yeasterday, not working yet')
     print('-q [id] -- analyzes queue with given id only')
     print('-d  -- debug, turns on debug mode')
-    print(f"-i  -- images, updates gods images in directory '{PATH_TO_GODS_IMAGES}')") 
+    print(
+        f"-i  -- images, updates gods images in directory '{PATH_TO_GODS_IMAGES}')")
 
 
 def print_log(msg, with_time=True):
@@ -232,9 +236,9 @@ def handle_queue(queue_id, date, name=None):
     if requests < len(match_ids) / MAX_BATCH + 11:
         print_log('Daily request limit reached. Aborting')
         return False
-    rs = analyzer.analyze_match_list(match_ids, sessions=sessions)
-    rs.name = name
-    rs.load_to_db(queue_id, date)
+    result_set = analyzer.analyze_match_list(match_ids, sessions=sessions)
+    result_set.name = name
+    result_set.load_to_db(queue_id, date)
 
     return True
 
@@ -254,6 +258,16 @@ def fill():
 
 
 def log_to_database(log_type: str, info: str, response='') -> bool:
+    """ Logs info to database 
+
+        Args:
+            log_type (str): Type of logged info
+            info (str): Info to log
+            Response (str): Additional info to log (Default='')
+        Returns:
+            True if succeded
+            False otherwise
+    """
     host = gethostname()
     if response == '' or response is None:
         query = "INSERT INTO logs (type, logInfo, date, response, host) \

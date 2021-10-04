@@ -1,7 +1,6 @@
 from json import load as json_load
 import os
 
-TIERLIST_FILE_PATH = '../tiers.json'
 LATEST_SESSION_FILE = '../latest_sessions.txt'
 
 
@@ -60,16 +59,3 @@ def write_latest_sessions(sessions: list):
         for smite_obj in sessions:
             file.write(smite_obj.session)
             file.write('\n')
-
-
-def read_tiers_file(path=TIERLIST_FILE_PATH):
-    """ Reads tier list file
-
-        Args:
-            path (str): Path to file (Default: '../tiers.json')
-
-        Returns:
-            Dictionary created from json file 
-    """
-    with open(path) as file:
-        return json_load(file)
