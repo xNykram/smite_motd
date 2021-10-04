@@ -49,6 +49,7 @@ def main(argv):
                 print_log(
                     'Error occurred while analyzing yeasterday queues.')
                 print_log(err, with_time=False)
+                log_to_database('analyzer', 'Failure', str(err))
         elif opt == '-u':
             try:
                 update_all()
@@ -83,7 +84,7 @@ def main(argv):
                 print_log('Error occurred while saving god images')
                 print_log(err, with_time=False)
                 log_to_database('updateGodsImages', 'Failure',
-                                str(err.with_traceback()))
+                                str(err))
         elif opt == '-d':
             debug = True
             print_log('Debug mode: ON')
