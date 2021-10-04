@@ -1,0 +1,20 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTNAME }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /SmiteAPI-Dev/app/tests
+          python3 db_test.py
