@@ -16,5 +16,5 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /SmiteAPI-Dev/app/tests
+          cd /Smitelore/Backend/app/tests
           python3 db_test.py
