@@ -71,15 +71,18 @@ a {
     font-size: 25px;
 }
 
-.motdcell .motddesc li {
-    padding: 3px;
-}
 
+.motdcell .motddesc {
+    list-style-type: none;
+}
 li:first-child {
     list-style-type: none;
     text-decoration: none;
 }
-
+li:nth-child(2) {
+    list-style-type: disc;
+    text-decoration: normal;
+}
 .gods-pref .gods-bar .god .god-image img {
     width: 100px;
 }
