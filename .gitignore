@@ -6,16 +6,16 @@ __pycache__/
 *.swp
 
 # project files
-app/crons/venv
-smiteapi/
-/app/dbconfig.json
-/app/auth.json
-/smite_lore/dbconfig.json
-smite_lore/dbconfig.json
-/app/latest_sessions.txt
-run.bat
-smite_lore/smite_lore/static/gods
-/smite_lore/smite_lore/static/gods
+/Backend/app/crons/venv
+Backend/smiteapi/
+Backend/app/dbconfig.json
+Backend/app/auth.json
+Backend/smite_lore/dbconfig.json
+Backend/app/latest_sessions.txt
+Backend/run.bat
+Backend/smite_lore/smite_lore/static/gods
+Backend/auth.json
+Backend/dbconfig.json
+Backend/smite_lore/smite_lore/static/admin/
 auth.json
 dbconfig.json
-/smite_lore/smite_lore/static/admin/
