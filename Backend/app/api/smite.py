@@ -19,16 +19,16 @@ ERROR_CODE_DICT = {
 ITEMS_DICT = {}
 GODS_DICT = {}
 QUEUES_DICT = {
+    451: 'Conquest(R)',
+    450: 'Joust(R)',
+    440: 'Joust Solo(R)',
     448: 'Joust',
-    434: 'MOTD',
     435: 'Arena',
     426: 'Conquest',
     445: 'Assault',
     466: 'Clash',
-    451: 'Conquest(R)',
-    450: 'Joust(R)',
-    440: 'Joust Solo(R)',
-    459: 'Siege'
+    459: 'Siege',
+    434: 'MOTD'
 }
 
 AUTH = read_auth_config()
