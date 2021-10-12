@@ -211,8 +211,7 @@ def analyze_yeasterday():
     date = yeasterday.strftime('%Y%m%d')
     print_log(f"Yesterday date is {yeasterday.strftime('%d.%m.%Y')}")
     for queue_id, name in QUEUES_DICT.items():
-        if not handle_queue(queue_id, date, name):
-            break
+        handle_queue(queue_id, date, name)
 
 
 def handle_queue(queue_id, date, name=None):
@@ -227,15 +226,13 @@ def handle_queue(queue_id, date, name=None):
         name = QUEUES_DICT.get(queue_id, 'UNKNOWN')
     if (queue_id, date) in analyzer.results:
         print_log(f'{name} @ {date} is already analyzed. Skipping...')
-        return True
     requests = smite.request_left()
     buffer = f'Fetching match list for {name} @ {date}...'
     print_log(buffer)
     match_ids = smite.get_match_ids(queue_id, date)
     print_log(f'Downloaded {len(match_ids)} games.')
     if requests < len(match_ids) / MAX_BATCH + 11:
-        print_log('Daily request limit reached. Aborting')
-        return False
+        raise Exception("Daily request limit reached")
     result_set = analyzer.analyze_match_list(match_ids, sessions=sessions)
     result_set.name = name
     result_set.load_to_db(queue_id, date)
