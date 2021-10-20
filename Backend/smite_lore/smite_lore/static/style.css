@@ -1,393 +1,357 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@300;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@300;500;700&display=swap");
 * {
-    padding: 0px;
-    margin: 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 body {
-    background-color: #3D3C3C;
+  background-color: #3D3C3C;
 }
 
 a {
-    color: #ddd7d7;
-    text-decoration: none;
+  color: #ddd7d7;
+  text-decoration: none;
 }
 
 .main-con {
-    color: white;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 70%;
-    margin: auto;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 70%;
+  margin: auto;
 }
 
 .main-con-title {
-    padding: 10px;
-    font-size: 40px;
-    font-weight: bold;
+  padding: 10px;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 .main-sections {
-    padding: 20px;
-    font-size: 20px;
-    font-family: 'Roboto';
-    font-weight: bold;
-    width: auto;
+  padding: 20px;
+  font-size: 20px;
+  font-family: "Roboto";
+  font-weight: bold;
+  width: auto;
 }
-
 .main-sections h4 {
-    padding: 15px;
-    letter-spacing: 5px;
-    font-size: 30px;
-    font-family: 'Gemunu Libre', sans-serif;
+  padding: 15px;
+  letter-spacing: 5px;
+  font-size: 30px;
+  font-family: "Gemunu Libre", sans-serif;
 }
-
 .main-sections .motdcell {
-    text-align: left;
+  text-align: left;
 }
 
 .footer {
-    font-size: 10px;
-    padding: 5px;
-    font-family: 'Roboto';
-    margin: auto;
+  font-size: 10px;
+  padding: 5px;
+  font-family: "Roboto";
+  margin: auto;
 }
 
 .motdcell {
-    padding: 10px;
+  padding: 10px;
 }
-
 .motdcell div {
-    font-size: 15px;
-    padding: 5px;
+  font-size: 15px;
+  padding: 5px;
 }
-
 .motdcell .motdname {
-    font-size: 25px;
+  font-size: 25px;
 }
-
 .motdcell .motddesc li {
-    margin: 5px;
+  margin: 5px;
 }
 .motdcell .motddesc li:first-child {
-    list-style-type: none;
-}
-.gods-pref .gods-bar .god .god-image img {
-    width: 100px;
-}
-
-.gods-pref .gods-bar .god .god-name {
-    font-size: 15px;
+  list-style-type: none;
 }
 
 .gods-pref {
-    display: flex;
-    justify-content: left;
-    flex-direction: column;
-    padding: 10px;
-    margin-bottom: 1%;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  padding: 10px;
+  margin-bottom: 1%;
 }
-
-.gods-pref .gods-pref-title {
-    text-align: left;
-    font-size: 20px;
-    padding: 5px;
+.gods-pref .gods-bar .god .god-image img {
+  width: 100px;
 }
-
-.gods-pref .gods-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: left;
-    width: auto;
-}
-
 .gods-pref .gods-bar .god .god-name {
-    text-align: center;
-    padding: 10px;
-    letter-spacing: 1.5px;
+  font-size: 15px;
 }
-
-.gods-pref .gods-bar .god div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+.gods-pref .gods-pref-title {
+  text-align: left;
+  font-size: 20px;
+  padding: 5px;
 }
-
+.gods-pref .gods-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: left;
+  width: auto;
+}
 .gods-pref .gods-bar .god {
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-
+.gods-pref .gods-bar .god .god-name {
+  text-align: center;
+  padding: 10px;
+  letter-spacing: 1.5px;
+}
+.gods-pref .gods-bar .god div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 .gods-pref .gods-bar .god .god-wr {
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    letter-spacing: 1.1px;
-    color: #C0C0C0;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 1.1px;
+  color: #C0C0C0;
 }
-
 .gods-pref .gods-bar .god .god-wr div {
-    padding: 2px;
+  padding: 2px;
 }
-
 .gods-pref .gods-bar .god img {
-    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.34);
+  box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.34);
 }
 
 header {
-    width: 90%;
+  width: 90%;
 }
 
 .navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
-
 .navbar .nav-logo img {
-    width: 200px;
+  width: 200px;
 }
-
 .navbar .nav-right-panel {
-    color: white;
-    flex-direction: row;
-    display: flex;
-    font-family: 'Roboto';
-    font-weight: bold;
+  color: white;
+  flex-direction: row;
+  display: flex;
+  font-family: "Roboto";
+  font-weight: bold;
 }
-
 .navbar .nav-right-panel .nav-panel-items {
-    margin-right: auto;
-    padding: 10px;
+  margin-right: auto;
+  padding: 10px;
 }
-
 .navbar .nav-right-panel .nav-panel-items a:hover {
-    color: white;
+  color: white;
 }
 
 h1 {
-    font-size: 50px;
+  font-size: 50px;
 }
 
 .main-con .main-title {
-    font-family: 'Gemunu Libre', sans-serif;
-    letter-spacing: 10px;
-    padding-bottom: 45px;
-    text-align: center;
+  font-family: "Gemunu Libre", sans-serif;
+  letter-spacing: 10px;
+  padding-bottom: 45px;
+  text-align: center;
 }
-
 .main-con .tierlist-box {
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
 }
-
 .main-con .tierlist-box div {
-    box-shadow: #292828 2px 2px 10px;
-    background-color: #292828;
-    margin: 8px;
-    border-radius: 6px;
+  box-shadow: #292828 2px 2px 10px;
+  background-color: #292828;
+  margin: 8px;
+  border-radius: 6px;
 }
-
 .main-con .tierlist-box .rank-box {
-    padding: 10px;
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: 'Roboto';
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 3.5px;
-    display: flex;
-    margin: 15px;
-    min-width: 45px;
-    min-height: 45px;
+  padding: 10px;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Roboto";
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 3.5px;
+  display: flex;
+  margin: 15px;
+  min-width: 45px;
+  min-height: 45px;
 }
-
-.main-con .tierlist-box .tierlist-section-ss .rank-box {
-    background-color: #7e53db;
-}
-
 .main-con .tierlist-box .tierlist-section-ss {
-    border-top: 5px solid #7e53db;
+  border-top: 5px solid #7e53db;
 }
-
-.main-con .tierlist-box .tierlist-section-spos .rank-box {
-    background-color: #214cc2;
+.main-con .tierlist-box .tierlist-section-ss .rank-box {
+  background-color: #7e53db;
 }
-
 .main-con .tierlist-box .tierlist-section-spos {
-    border-top: 5px solid #214cc2;
+  border-top: 5px solid #214cc2;
 }
-
-.main-con .tierlist-box .tierlist-section-s .rank-box {
-    background-color: #6e98eb;
+.main-con .tierlist-box .tierlist-section-spos .rank-box {
+  background-color: #214cc2;
 }
-
 .main-con .tierlist-box .tierlist-section-s {
-    border-top: 5px solid #6e98eb;
+  border-top: 5px solid #6e98eb;
 }
-
-.main-con .tierlist-box .tierlist-section-sneg .rank-box {
-    background-color: #41bf50;
+.main-con .tierlist-box .tierlist-section-s .rank-box {
+  background-color: #6e98eb;
 }
-
 .main-con .tierlist-box .tierlist-section-sneg {
-    border-top: 5px solid #41bf50;
+  border-top: 5px solid #41bf50;
 }
-
-.main-con .tierlist-box .tierlist-section-apos .rank-box {
-    background-color: #89e8a7;
+.main-con .tierlist-box .tierlist-section-sneg .rank-box {
+  background-color: #41bf50;
 }
-
 .main-con .tierlist-box .tierlist-section-apos {
-    border-top: 5px solid #89e8a7;
+  border-top: 5px solid #89e8a7;
 }
-
-.main-con .tierlist-box .tierlist-section-a .rank-box {
-    background-color: #e38b2d;
+.main-con .tierlist-box .tierlist-section-apos .rank-box {
+  background-color: #89e8a7;
 }
-
 .main-con .tierlist-box .tierlist-section-a {
-    border-top: 5px solid #e38b2d;
+  border-top: 5px solid #e38b2d;
 }
-
-.main-con .tierlist-box .tierlist-section-aneg .rank-box {
-    background-color: #ed8787;
+.main-con .tierlist-box .tierlist-section-a .rank-box {
+  background-color: #e38b2d;
 }
-
 .main-con .tierlist-box .tierlist-section-aneg {
-    border-top: 5px solid #ed8787;
+  border-top: 5px solid #ed8787;
 }
-
-.main-con .tierlist-box .tierlist-section-b .rank-box {
-    background-color: #f25555;
+.main-con .tierlist-box .tierlist-section-aneg .rank-box {
+  background-color: #ed8787;
 }
-
 .main-con .tierlist-box .tierlist-section-b {
-    border-top: 5px solid #f25555;
+  border-top: 5px solid #f25555;
 }
-
-.main-con .tierlist-box .tierlist-section-c .rank-box {
-    background-color: #d13f3f;
+.main-con .tierlist-box .tierlist-section-b .rank-box {
+  background-color: #f25555;
 }
-
 .main-con .tierlist-box .tierlist-section-c {
-    border-top: 5px solid #d13f3f;
+  border-top: 5px solid #d13f3f;
 }
-
-.main-con .tierlist-box .tierlist-section-d .rank-box {
-    background-color: #cf1b1b;
+.main-con .tierlist-box .tierlist-section-c .rank-box {
+  background-color: #d13f3f;
 }
-
 .main-con .tierlist-box .tierlist-section-d {
-    border-top: 5px solid #cf1b1b;
+  border-top: 5px solid #cf1b1b;
 }
-
+.main-con .tierlist-box .tierlist-section-d .rank-box {
+  background-color: #cf1b1b;
+}
 .main-con .tierlist-box .gods .god img {
-    width: 60px;
-    height: 60px;
-    box-shadow: black 0px 0px 8px;
-    border-radius: 5px;
+  width: 60px;
+  height: 60px;
+  box-shadow: black 0px 0px 8px;
+  border-radius: 5px;
 }
-
 .main-con .tierlist-box .tierlist-section {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
-
 .main-con .tierlist-box .tierlist-section .gods {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-
 .main-con .tierlist-box .tierlist-section .gods .god {
-    margin-top: 4px;
-    margin-right: 5px;
-    padding: 0px;
+  margin-top: 4px;
+  margin-right: 5px;
+  padding: 0px;
 }
-
 .main-con .main-con-title {
-    font-family: 'Gemunu Libre', sans-serif;
-    letter-spacing: 3px;
-    font-weight: normal;
-    padding: 25px;
-    text-align: center;
+  font-family: "Gemunu Libre", sans-serif;
+  letter-spacing: 3px;
+  font-weight: normal;
+  padding: 25px;
+  text-align: center;
 }
-
 .main-con .tierlist-description {
-    font-family: 'Montserrat';
-    font-size: 10px;
-    text-align: right;
-    padding: 15px;
+  font-family: "Montserrat";
+  font-size: 10px;
+  text-align: right;
+  padding: 15px;
 }
 
 @media only screen and (max-width: 600px) {
-    header {
-        width: 100%;
-    }
-    .navbar .nav-logo img {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .navbar .nav-logo {
-        display: inline-block;
-    }
-    .navbar .nav-right-panel {
-        display: none;
-    }
-    .main-con-title {
-        justify-content: left;
-    }
-    .main-con {
-        width: max-content;
-        justify-content: left;
-        text-align: left;
-    }
-    .main-sections h4 {
-        padding: 5px;
-        font-size: 25px;
-        text-align: center;
-    }
-    .motdcell .motddesc {
-        padding: 5px;
-    }
-    .motdcell .motddesc li {
-        padding: 5px;
-    }
-    .gods-pref .gods-bar {
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-    }
-    .gods-pref .gods-bar .god {
-        padding: 13px;
-        margin: auto;
-    }
-    .main-sections {
-        height: auto;
-    }
-    .footer {
-        font-size: 10px;
-        font-weight: normal;
-        text-align: center;
-    }
-    .main-con {
-        width: fit-content;
-    }
-    .main-con .main-title {
-        font-size: 34px;
-    }
+  header {
+    width: 100%;
+  }
+
+  .navbar .nav-logo {
+    display: inline-block;
+  }
+  .navbar .nav-logo img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .navbar .nav-right-panel {
+    display: none;
+  }
+
+  .main-con-title {
+    justify-content: left;
+  }
+
+  .main-con {
+    width: max-content;
+    justify-content: left;
+    text-align: left;
+  }
+
+  .main-sections h4 {
+    padding: 5px;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .motdcell .motddesc {
+    padding: 5px;
+  }
+  .motdcell .motddesc li {
+    padding: 5px;
+  }
+
+  .gods-pref .gods-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .gods-pref .gods-bar .god {
+    padding: 13px;
+    margin: auto;
+  }
+
+  .main-sections {
+    height: auto;
+  }
+
+  .footer {
+    font-size: 10px;
+    font-weight: normal;
+    text-align: center;
+  }
+
+  .main-con {
+    width: fit-content;
+  }
+  .main-con .main-title {
+    font-size: 34px;
+  }
 }
+
+/*# sourceMappingURL=style.css.map */
