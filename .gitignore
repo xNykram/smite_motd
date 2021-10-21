@@ -1,17 +1,16 @@
-#general files
 ../.idea/
 __pycache__/
 ./venv
 .idea
 *.swp
-
-# project files
 /Backend/app/crons/venv
 Backend/smiteapi/
 Backend/app/dbconfig.json
 Backend/app/auth.json
 Backend/smite_lore/dbconfig.json
 Backend/app/latest_sessions.txt
+latest_sessions.txt
+log.txt
 Backend/run.bat
 Backend/smite_lore/smite_lore/static/gods
 Backend/auth.json
@@ -19,3 +18,4 @@ Backend/dbconfig.json
 Backend/smite_lore/smite_lore/static/admin/
 auth.json
 dbconfig.json
+Backend/smite_lore/smite_lore/static/style.css.map

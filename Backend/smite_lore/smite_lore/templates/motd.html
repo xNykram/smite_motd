@@ -12,8 +12,7 @@
     <title>Smite - Motd</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{% static '/smite_logo_small.png' %}">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5025793484206722"
-        crossorigin="anonymous"></script>
+    <link href='https://css.gg/arrow-down-r.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -53,7 +52,6 @@
                 <div class="motddate">{{motd.date}}</div>
             </div>
             <div class="gods-pref">
-<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
                 <div class="gods-bar">
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
@@ -81,7 +79,6 @@
                 <div class="motddate">{{motd.date}}</div>
             </div>
             <div class="gods-pref">
-<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
                 <div class="gods-bar">
                     {% for god in gods %}
                     {% if god.motdName == motd.name %}
@@ -103,33 +100,39 @@
         <div class="main-sections main-con-prev">
             <h4>ARCHIV MOTD'S</h4>
             {% for motd in archiv_motd %}
-            <div class="motdcell">
-                <div class="motdname">{{motd.name}}</div>
-                <div class="motddesc">{{motd.description | safe}}</div>
-                <div class="motddate">{{motd.date}}</div>
-            </div>
-            <div class="gods-pref">
-<!--                <div class="gods-pref-title">Best Gods for this motd:</div>-->
-                <div class="gods-bar">
-                    {% for god in gods %}
-                    {% if god.motdName == motd.name %}
-                    <div class="god">
-                        <div class="god-image"><img alt="Smitelore god image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
-                        <div class="god-name">{{god.godName}}</div>
-                        <div class="god-wr">
-                            <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+            <div class="motd-section">
+                <div class="motdcell">
+                    <div class="motdname">{{motd.name}}</div>
+                    <div class="motddesc">{{motd.description | safe}}</div>
+                    <div class="motddate">{{motd.date}}</div>
+                </div>
+                <div class="gods-pref">
+                    <div class="gods-bar">
+                        {% for god in gods %}
+                        {% if god.motdName == motd.name %}
+                        <div class="god">
+                            <div class="god-image"><img alt="Smitelore god image" src="{% static 'gods/'%}{{ god.godName }}.jpg"></div>
+                            <div class="god-name">{{god.godName}}</div>
+                            <div class="god-wr">
+                                <div class="title">Win Ratio</div> {{ god.ratio|floatformat }}%
+                            </div>
                         </div>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endif %}
-                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
+            <div id="load-more">
+                <ion-icon size="large" name="chevron-down-outline" class="arrow-down"></ion-icon>
+            </div>
         </div>
         <div class="footer">
                 <i>&#169; 2021 Smitelore. All rights reserved.</i>
         </div>
     </div>
 </body>
-
+<script src="{% static 'motd.js' %}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </html>
