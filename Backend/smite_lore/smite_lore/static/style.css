@@ -25,6 +25,21 @@ a {
   width: 70%;
   margin: auto;
 }
+.main-con #load-more {
+  color: white;
+  background-color: #2c2b2b;
+  display: flex;
+  height: 40px;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+.main-con #load-more .arrow-down {
+  padding: 5px;
+}
+.main-con #load-more:hover {
+  cursor: pointer;
+}
 
 .main-con-title {
   padding: 10px;
