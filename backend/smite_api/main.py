@@ -15,7 +15,7 @@ from db.tierlist import update_tier_list
 TOP_COUNT = 8
 
 # Path to directory where will be stored gods images
-PATH_TO_GODS_IMAGES = '../smite_lore/smite_lore/static/gods/'
+PATH_TO_GODS_IMAGES = '../app/static/gods/'
 
 log_file = None
 sessions = []
