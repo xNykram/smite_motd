@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  app:
+    container_name: smite_motd
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    image: smite_motd:dev
+    volumes:
+      - ./backend:/code
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    network_mode: postgres
+    depends_on:
+      - migrations
+  migrations:
+    container_name: smite_motd_migrations
+    image: smite_motd:dev
+    command: python manage.py migrate --noinput & python manage.py makemigrations --noinput
+    volumes:
+      - ./backend:/code
+    env_file:
+      - .env
+    network_mode: postgres
+
+networks:
+  external-postgres:
+    name: postgres

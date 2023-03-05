@@ -1,5 +1,4 @@
 from pathlib import Path
-from json import load
 import os
 
 
@@ -7,10 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-2&_49v#j%8288fm-y(9fogao*lz)c7#=q-=y_2^xdcs21iaxs('
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['51.68.140.249', 'https://nykram.pl', 'localhost', '127.0.0.1', 'nykram.pl', 'https://smitelore.com', 'smitelore.com']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -20,12 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-    'smite_lore'
+    'app'
 ]
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-MEDIA_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "smite_lore//static")
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -37,7 +31,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
-ROOT_URLCONF = 'smite_lore.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
@@ -55,20 +49,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'smite_lore.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
-with open('dbconfig.json', 'r') as file:
-    config = load(file)
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': config['database']['dbname'],
-        'USER': config['database']['login'],
-        'PASSWORD': config['database']['password'],
-        'HOST': config['database']['server_name'],
-        'PORT': "1433",
-        "OPTIONS": {'driver': 'ODBC Driver 17 for SQL Server'},
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("POSTGRES_DB"),
+        'USER': os.environ.get("POSTGRES_LOGIN"),
+        'PASSWORD': os.environ.get("POSTGRES_PWD"),
+        'HOST': os.environ.get("POSTGRES_HOST"),
+        'PORT': 5432,
     }
 }
 
@@ -87,6 +78,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+STATIC_ROOT = os.path.join(BASE_DIR, "app/static")
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Paris'
@@ -96,9 +93,5 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
-STATIC_URL = '/static/'
-
-MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

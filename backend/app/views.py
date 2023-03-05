@@ -13,7 +13,6 @@ def stats(request):
 
 def tierlist(request):
     tierlist = Tierlist.objects.all().filter(mode='Conquest(R)')
-    print(tierlist)
     return render(request, 'tierlist.html', {'tierlistgods': tierlist})
 
 
